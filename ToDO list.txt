@@ -1,0 +1,80 @@
+
+# admin - > SuperAdmin
+
+connections
+##### - on add connections -> edit sp_# file add cables to table
+# on remove connections -> edit sp_# file remove cables ->
+# check inconsistency (is something was spliced to removed cable) TP
+# check inconsistency (is something was spliced to removed cable) SP
+# update sp tp state on connections
+
+#  splice
+# - splice modal sp
+# - splice modal tp
+
+#- cable direction calculations (east west ...)
+
+edit
+#- on move item (if connected move points)
+#- update db for each item
+#- on delete- update (sp, tp, cables, connections)
+
+#- on edit cable (add     points) update  (connections)
+#- on edit cable (remove  points) update  (connections)
+
+#- on edit tp size
+#- on edit cable size -> if up    add more to (update, sp tp)
+#                        if down  remove and clean up
+
+# log file viewing
+#- add all kind of logs
+
+# -search sp, tp
+# - submit pictures modal
+
+trace fiber
+#-> calculate loss and budget.
+
+
+- tp > tp 1 splice only should be 2
+
+
+- optimize change of tp sp cable. load and update only  what needed
+
+#- cable setDate by user.
+
+# - sequential numbers input.
+
+# - port labels change in TP
+
+# - move buttons to menu
+
+# - change Control Panel to project name
+
+- check new project unic name
+- update label with new project
+- log add user_name to db.
+
+- profile -> change password, change pic
+
+- tp > tp 1 splice only should be 2
+
+- optimize change of tp sp cable. load and update only  what needed
+
+-try blocks
+- server response correct info
+
+pull database for sp tp models and brands
+pull db for cable brands
+pull db for vendor
+
+create archive for old splice tables.
+
+
+-> trace fiber to break point.
+
+
+PROLEMS
+no db after user added
+
+

@@ -1,0 +1,54 @@
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+  .button {
+    background-color: #4b4d4b;
+    border:  solid 1px whitesmoke; 
+    border-radius: 10px;
+    color: rgb(247, 241, 241);
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    background-color: #101310;
+    border:  solid 1px whitesmoke; ;
+    border-radius: 10px;
+    color: rgb(247, 241, 241);
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+
+  .input {
+  
+    border: solid 1px whitesmoke;    
+    border-radius: 10px;  
+    padding: 5px 5px;
+    text-align: center;
+    height: 30px;        
+    font-weight: bold;
+    font-size: 14px;
+    margin: 4px 2px;
+    
+  }
+
+  input::placeholder {
+    font-weight: bold;
+    opacity: .5;
+    color: red;
+}

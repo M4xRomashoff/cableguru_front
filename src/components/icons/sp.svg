@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   role="img"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg679"
+   sodipodi:docname="sp.svg"
+   inkscape:export-filename="sp_r.png"
+   inkscape:export-xdpi="120"
+   inkscape:export-ydpi="120"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs683">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 12 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="24 : 12 : 1"
+       inkscape:persp3d-origin="12 : 8 : 1"
+       id="perspective847" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview681"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="42.791667"
+     inkscape:cx="6.4381694"
+     inkscape:cy="12"
+     inkscape:window-width="2400"
+     inkscape:window-height="1261"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg679" />
+  <title
+     id="title675">Artifact Hub</title>
+  <path
+     d="M11.9999 24.00044c-.617.0012-1.24209-.17217-1.78008-.50002l-7.50975-4.29263c-1.01763-.61684-1.64001-1.71772-1.64066-2.9077V7.72971c0-1.25305.63694-2.36948 1.76008-3.01013L10.25041.47895c1.08003-.63867 2.41512-.63767 3.49515.001l7.41975 4.23763c1.08007.59613 1.7714 1.7341 1.76266 3.01013v8.58195c0 .96773-.44338 2.16388-1.63666 2.89856l-7.51074 4.2922c-.56347.34395-1.19861.50002-1.78167.50002zm-.50002-21.34695L3.95513 6.96224c-.2006.1567-.37906.36914-.37902.76747l.001 8.67039c.03753.22045.11891.42808.37302.63459l7.55975 4.31663c.26601.172.66403.21.98504 0l7.51792-4.29663c.23173-.14844.37102-.38858.41002-.65359V7.72971c.0095-.29884-.13595-.5886-.37702-.76547L12.49993 2.6525c-.39058-.23932-.7592-.15575-1.00004.001z"
+     id="path677" />
+  <path
+     style="fill:#241c1c"
+     d="m 4.0895813,7.4079844 -0.070107,9.1840306 7.7351507,-4.556962 z m 15.8208377,0.070107 0.0701,9.0204476 -7.851996,-4.463486 z"
+     id="path2212"
+     sodipodi:nodetypes="cccccccc" />
+  <metadata
+     id="metadata2335">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Artifact Hub</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="opacity:0.7;fill:#ff0000;stroke-width:1.04739"
+     d="M 11.964756,2.9678676 19.256086,7.1804113 11.893505,11.544303 4.6971762,7.079512 Z"
+     id="path2399" />
+  <path
+     style="opacity:0.7;fill:#ff0000"
+     d="m 4.6270691,16.778968 c 0.3037975,-0.163583 7.2911389,-4.159689 7.2911389,-4.159689 l 7.454723,4.089582 -7.384615,4.253164 z"
+     id="path2445"
+     sodipodi:nodetypes="ccccc" />
+</svg>

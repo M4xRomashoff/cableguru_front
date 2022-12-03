@@ -1,0 +1,61 @@
+.label1 {
+  /* background-color: #4b4d4b; */
+  /* border-radius: 10px; */
+  /* border: solid 1px whitesmoke;     */
+  /* color: rgb(247, 241, 241); */
+  padding: 5px 5px;
+  text-align: left;
+  height: 30px;
+
+  /* display: inline-block; */
+  /* font-weight: bold; */
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+.label2 {
+  /* background-color: #4b4d4b; */
+  border-radius: 10px;
+  border: solid 1px whitesmoke;
+  /* color: rgb(247, 241, 241); */
+  padding: 5px 5px;
+  text-align: left;
+  height: 30px;
+
+  /* display: inline-block; */
+  font-weight: bold;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+.button {
+  background-color: #4b4d4b;
+  border: solid 1px whitesmoke;
+  border-radius: 10px;
+  color: rgb(247, 241, 241);
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #101310;
+    border: solid 1px whitesmoke;;
+    border-radius: 10px;
+    color: rgb(247, 241, 241);
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+}
+
+.leaflet-container {
+  height: 420px;
+}

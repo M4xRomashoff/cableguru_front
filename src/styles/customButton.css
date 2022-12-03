@@ -1,0 +1,29 @@
+.ico{
+  width:26px;
+  height:26px;
+  background:url(terminal.png);
+}
+.ico:before{
+
+  background:url(terminal.png);
+  width:26px;
+  height:26px;
+}
+
+.icoSplice{
+  width:26px;
+  height:26px;
+  background:url(sp_icon.png);
+}
+.icoSplice:before{
+
+  background:url(sp_icon.png);
+  width:26px;
+  height:26px;
+}
+/*.ico:after{*/
+
+/*  height: 26px;  !*height of icon *!*/
+/*  width: 26px;  !*width of icon *!*/
+/*  background: #F8E6AE url(cable.jpg) no-repeat 0px 0px;*/
+/*}*/
