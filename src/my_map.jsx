@@ -1,20 +1,30 @@
-import React, { useState, useRef } from 'react';
-import { LayersControl, MapContainer, Marker, Popup, TileLayer, useMap, useMapEvent, useMapEvents } from 'react-leaflet';
-
-import { useNavigate } from 'react-router-dom';
-import { getSessionItem, setSessionItem } from './helpers/storage';
+import React, { useState } from 'react';
+import { LayersControl, MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet';
+import { getSessionItem } from './helpers/storage';
 import AddComments from './components/AddComments';
 import TraceFiber from './components/TraceFiber';
-
-import FCS from './components/sp/FCS';
 import FCS_edit from './components/sp/FCS_edit';
-import FcsTp from './components/tp/FcsTp';
 import FCS_Tp_edit from './components/tp/FCS_Tp_edit';
-import { deleteCableItem, deleteTpItem, deleteSpItem, getSpData, getTpData, updateSpLatLng, updateTpLatLng, updateCableLatLng, updateConnections, updateConnectionsFix } from './api/dataBasesApi';
+import {
+  addCableItem,
+  addSpItem,
+  addTpItem,
+  deleteCableItem,
+  deleteSpItem,
+  deleteTpItem,
+  getSpData,
+  getTpData,
+  updateCableLatLng,
+  updateConnections,
+  updateConnectionsFix,
+  updateSpLatLng,
+  updateTpLatLng,
+} from './api/dataBasesApi';
 import useApi from './hooks/useApi';
 import BackdropLoading from './components/BackdropLoading';
 import './components/leaflet-draw-toolbar/leaflet.draw.css';
-import { makeStyles, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import cursorMarker from './components/icons/sp_o.png'
 
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
@@ -24,8 +34,6 @@ import PrepMarkerListTP from './components/tp/PrepMarkerListTP';
 
 import AddMarkerSP from './components/sp/AddMarkerSP';
 import AddMarkerTP from './components/tp/AddMarkerTP';
-
-import { addSpItem, addTpItem, addCableItem } from './api/dataBasesApi';
 import PrepCablesList from './components/Cable/PrepCableList';
 import Cable_edit from './components/Cable/cable_edit';
 import CreateCableItem from './components/Cable/AddCableItem';
@@ -33,7 +41,6 @@ import ConnectionControl from './components/ConnectionControl';
 import SpliceFibers from './components/SpliceFibers';
 import SpliceFibersTp from './components/SpliceFibersTp';
 import { getCablePointsFromString } from './helpers/getCablePointsFromString';
-import CustomButton from './components/Button';
 import PrepTracesList from './components/Traces/PrepTracesList';
 import RouteDetails from './components/Traces/RouteDetails';
 import './styles/customButton.css';
@@ -306,7 +313,12 @@ const MyMap = ({
       }
       //---------------- REMOVE POINT -----------------------------------------------
       if (item.action === 'removePoint') {
-        updateConnectionsId.push({ cabId: item.id, point: item.point, action: 'remove', layerLatLng: item.layer_latlngs });
+        updateConnectionsId.push({
+          cabId: item.id,
+          point: item.point,
+          action: 'remove',
+          layerLatLng: item.layer_latlngs,
+        });
       }
 
       //---------------- DRAG, MOVE POINT -----------------------------------------------
@@ -402,7 +414,11 @@ const MyMap = ({
     const map = mapInstance;
     let changeArr = [];
     setMap(mapInstance);
+
+    map.pm.setGlobalOptions({ cursorMarker: false, templineStyle: { color: 'red' }, continueDrawing: false });
+
     map.on('pm:drawstart', (e) => {
+      e.workingLayer._icon.src = cursorMarker
       setDrawingCable(true);
     });
 
@@ -434,7 +450,11 @@ const MyMap = ({
     map.on('pm:remove', (e) => {
       if (e.layer.options.spId) changeArr.push({ shapeType: 'sp', id: e.layer.options.spId, action: 'delete' });
       if (e.layer.options.tpId) changeArr.push({ shapeType: 'tp', id: e.layer.options.tpId, action: 'delete' });
-      if (e.layer.options.cableId) changeArr.push({ shapeType: 'cable', id: e.layer.options.cableId, action: 'delete' });
+      if (e.layer.options.cableId) changeArr.push({
+        shapeType: 'cable',
+        id: e.layer.options.cableId,
+        action: 'delete',
+      });
     });
 
     map.on('layeradd', ({ layer }) => {
@@ -443,17 +463,33 @@ const MyMap = ({
       if (layer.options?.cableId) {
         cableToLL.push({ cableId: layer.options?.cableId, _leaflet_id: layer._leaflet_id });
         layer.on('pm:vertexadded', (e) => {
-          changeArr.push({ shapeType: 'cable', id: e.layer.options.cableId, action: 'addPoint', point: e.indexPath[0], layer_latlngs: e.layer._latlngs });
+          changeArr.push({
+            shapeType: 'cable',
+            id: e.layer.options.cableId,
+            action: 'addPoint',
+            point: e.indexPath[0],
+            layer_latlngs: e.layer._latlngs,
+          });
         });
         layer.on('pm:vertexremoved', (e) => {
-          changeArr.push({ shapeType: 'cable', id: e.layer.options.cableId, action: 'removePoint', point: e.indexPath[0], layer_latlngs: e.layer._latlngs });
+          changeArr.push({
+            shapeType: 'cable',
+            id: e.layer.options.cableId,
+            action: 'removePoint',
+            point: e.indexPath[0],
+            layer_latlngs: e.layer._latlngs,
+          });
         });
       }
 
       layer.on('pm:edit', (e) => {
         if (e.layer.options.spId) changeArr.push({ shapeType: 'sp', id: e.layer.options.spId, action: 'movePoint' });
         if (e.layer.options.tpId) changeArr.push({ shapeType: 'tp', id: e.layer.options.tpId, action: 'movePoint' });
-        if (e.layer.options.cableId) changeArr.push({ shapeType: 'cable', id: e.layer.options.cableId, action: 'movePoint' });
+        if (e.layer.options.cableId) changeArr.push({
+          shapeType: 'cable',
+          id: e.layer.options.cableId,
+          action: 'movePoint',
+        });
       });
 
       layer.on('pm:change', (e) => {
@@ -522,8 +558,6 @@ const MyMap = ({
       title: 'Add New Cable',
       actions: ['cancel'],
     });
-
-    map.pm.setGlobalOptions({ cursorMarker: false, templineStyle: { color: 'red' }, continueDrawing: false });
 
     map.pm.addControls({
       position: 'topleft',
@@ -636,6 +670,7 @@ const MyMap = ({
   function onClickTraceFiber() {
     setTraceIsOpen(true);
   }
+
   function onClickRouteDetails() {
     setRouteDetailsIsOpen(true);
   }
@@ -666,12 +701,22 @@ const MyMap = ({
       }
     }
   }
+
   return (
     <div>
       <BackdropLoading isLoading={isSpLoading || isTpLoading} />
-      {portLabels.id && <PortLabelsModal onClose={onClosePortLabels} portLabels={portLabels} getTpDataRequest={getTpDataRequest} />}
-      {routeDetailsIsOpen && <RouteDetails trace={trace} setTrace={setTrace} onClose={onCloseRouteDetails} markersSp={markersSP} markersTp={markersTP} cables={cables} />}
-      {traceIsOpen && <TraceFiber trace={trace} setTrace={setTrace} onClose={onCloseTraceFiber} markersTp={markersTP} />}
+      {portLabels.id &&
+        <PortLabelsModal onClose={onClosePortLabels} portLabels={portLabels} getTpDataRequest={getTpDataRequest} />}
+      {routeDetailsIsOpen && <RouteDetails
+        trace={trace}
+        setTrace={setTrace}
+        onClose={onCloseRouteDetails}
+        markersSp={markersSP}
+        markersTp={markersTP}
+        cables={cables}
+      />}
+      {traceIsOpen &&
+        <TraceFiber trace={trace} setTrace={setTrace} onClose={onCloseTraceFiber} markersTp={markersTP} />}
       {pointInfo.id && <AddComments onClose={onCloseComment} nameId={pointInfo.name_id} />}
       {picturesInfo && <PicturesModal onClose={onClosePictures} picturesInfo={picturesInfo} />}
       {spliceFibersPointTp.id && (
@@ -697,10 +742,24 @@ const MyMap = ({
         />
       )}
       {changeSeqPoint.id && (
-        <ChangeSeqNumbersSp dataFcs={dataFcs} connections={connections} onClose={onCloseChangeSeq} getSpDataRequest={getSpDataRequest} cables={cables} changeSeqPoint={changeSeqPoint} />
+        <ChangeSeqNumbersSp
+          dataFcs={dataFcs}
+          connections={connections}
+          onClose={onCloseChangeSeq}
+          getSpDataRequest={getSpDataRequest}
+          cables={cables}
+          changeSeqPoint={changeSeqPoint}
+        />
       )}
       {changeSeqPointTp.id && (
-        <ChangeSeqNumbersTp dataFcs={dataFcsTp} connections={connections} onClose={onCloseChangeSeqTp} getTpDataRequest={getTpDataRequest} cables={cables} changeSeqPoint={changeSeqPointTp} />
+        <ChangeSeqNumbersTp
+          dataFcs={dataFcsTp}
+          connections={connections}
+          onClose={onCloseChangeSeqTp}
+          getTpDataRequest={getTpDataRequest}
+          cables={cables}
+          changeSeqPoint={changeSeqPointTp}
+        />
       )}
       {connectionsPoint.id && (
         <ConnectionControl
@@ -734,7 +793,15 @@ const MyMap = ({
         />
       )}
       {userAccessLevel >= 70 && Boolean(pointInfoCable.id) && (
-        <Cable_edit setCables={setCables} loadConnections={loadConnections} setPointInfo={setPointInfo} loadCables={loadCables} onClose={onCloseFcsC} pointInfoCable={pointInfoCable} cables={cables} />
+        <Cable_edit
+          setCables={setCables}
+          loadConnections={loadConnections}
+          setPointInfo={setPointInfo}
+          loadCables={loadCables}
+          onClose={onCloseFcsC}
+          pointInfoCable={pointInfoCable}
+          cables={cables}
+        />
       )}
       {userAccessLevel >= 70 && Boolean(dataFcsTp.body.length) && (
         <FCS_Tp_edit
@@ -753,28 +820,49 @@ const MyMap = ({
         />
       )}
 
-      <MapContainer center={centerHook} zoom={13} maxZoom={22} maxNativeZoom={19} scrollWheelZoom={true} whenReady={whenMapReady}>
+      <MapContainer
+        center={centerHook}
+        zoom={13}
+        maxZoom={22}
+        maxNativeZoom={19}
+        scrollWheelZoom={true}
+        whenReady={whenMapReady}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           maxZoom={22}
           maxNativeZoom={19}
         />
 
-        <LayersControl position="topright">
-          <LayersControl.Overlay checked name="SP">
+        <LayersControl position='topright'>
+          <LayersControl.Overlay checked name='SP'>
             {Boolean(markersSP !== []) && (
-              <PrepMarkerListSP editMode={editMode} deleteMode={deleteMode} dragMode={dragMode} drawingCable={drawingCable} setPointInfoFCS={setPointInfoFCS} markers={markersSP} />
+              <PrepMarkerListSP
+                editMode={editMode}
+                deleteMode={deleteMode}
+                dragMode={dragMode}
+                drawingCable={drawingCable}
+                setPointInfoFCS={setPointInfoFCS}
+                markers={markersSP}
+              />
             )}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay checked name="TP">
+          <LayersControl.Overlay checked name='TP'>
             {Boolean(markersTP !== []) && (
-              <PrepMarkerListTP editMode={editMode} deleteMode={deleteMode} dragMode={dragMode} drawingCable={drawingCable} setPointInfoFCS={setPointInfoFcsTp} markers={markersTP} />
+              <PrepMarkerListTP
+                editMode={editMode}
+                deleteMode={deleteMode}
+                dragMode={dragMode}
+                drawingCable={drawingCable}
+                setPointInfoFCS={setPointInfoFcsTp}
+                markers={markersTP}
+              />
             )}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay checked name="Cables">
+          <LayersControl.Overlay checked name='Cables'>
             {Boolean(cables !== []) && (
               <PrepCablesList
                 editMode={editMode}
@@ -788,7 +876,7 @@ const MyMap = ({
               />
             )}
           </LayersControl.Overlay>
-          <LayersControl.Overlay checked name="Trace">
+          <LayersControl.Overlay checked name='Trace'>
             <PrepTracesList trace={trace} setTrace={setTrace} />
           </LayersControl.Overlay>
         </LayersControl>

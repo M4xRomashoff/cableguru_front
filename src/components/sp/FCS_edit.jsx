@@ -282,7 +282,7 @@ const FCS_edit = ({ setChangeSeqPoint, setSpliceFibersPoint, onClose, setPointIn
   }
 
   return (
-    <ModalWithTitle title={'Edit: ' + form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
+    <ModalWithTitle title={'Edit: ' + form.name_id} close={onClose} open>
       <Box component="form" display="flex" gap={1} alignItems="flex-start" flexDirection="column">
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
           <CustomButton onClick={fullShort}> Full / Short</CustomButton>
