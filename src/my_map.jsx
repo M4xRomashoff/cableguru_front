@@ -543,7 +543,7 @@ const MyMap = ({
       if (e.shape === 'SP') {
         const newMarker = AddMarkerSP(e.layer._latlng);
         await addSpItem(newMarker);
-        const newItem = logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
+        logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
 
         mapInstance.removeLayer(e.marker);
         loadMarkersSp();
@@ -551,14 +551,14 @@ const MyMap = ({
       if (e.shape === 'TP') {
         const newMarker = AddMarkerTP(e.layer._latlng);
         await addTpItem(newMarker);
-        const newItem = logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
+        logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
         mapInstance.removeLayer(e.marker);
         loadMarkersTp();
       }
       if (e.shape === 'Cable') {
         const newMarker = CreateCableItem(e.layer._latlngs);
         await addCableItem(newMarker);
-        const newItem = logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
+        logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
         mapInstance.removeLayer(e.marker);
         loadCables();
       }
