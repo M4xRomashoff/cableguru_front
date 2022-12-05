@@ -190,6 +190,11 @@ const MyMap = ({
   const [picturesInfo, setPicturesInfo] = useState(false);
   const [portLabels, setPortLabels] = useState({});
 
+  let userAccessLevel = 0;
+  const userAccessLevelTemp = getSessionItem('user');
+  if (userAccessLevelTemp !== null) userAccessLevel = userAccessLevelTemp.access_level;
+
+
   function getLayerBySpId(spId, myMap) {
     let _leaflet_id = 0;
     spToLL.map((item) => {
@@ -412,6 +417,7 @@ const MyMap = ({
   }
 
   const whenMapReady = ({ target: mapInstance }) => {
+    if (userAccessLevel >= 77){
     const map = mapInstance;
     let changeArr = [];
     setMap(mapInstance);
@@ -608,7 +614,7 @@ const MyMap = ({
     if (setMap) {
       setMap(mapInstance);
     }
-  };
+  };};
 
   const { isLoading: isSpLoading, makeRequest: getSpDataRequest } = useApi({
     request: () => getSpData(pointInfoFCS.id),
@@ -670,9 +676,6 @@ const MyMap = ({
   };
 
   const project = getSessionItem('project');
-  let userAccessLevel = 0;
-  const userAccessLevelTemp = getSessionItem('user');
-  if (userAccessLevelTemp !== null) userAccessLevel = userAccessLevelTemp.access_level;
 
   function onClickTraceFiber() {
     setTraceIsOpen(true);
@@ -784,7 +787,7 @@ const MyMap = ({
         />
       )}
 
-      {userAccessLevel >= 70 && Boolean(dataFcs.body.length) && (
+      {userAccessLevel >= 50 && Boolean(dataFcs.body.length) && (
         <FCS_edit
           setChangeSeqPoint={setChangeSeqPoint}
           setPicturesInfo={setPicturesInfo}
@@ -799,7 +802,7 @@ const MyMap = ({
           setSpliceFibersPoint={setSpliceFibersPoint}
         />
       )}
-      {userAccessLevel >= 70 && Boolean(pointInfoCable.id) && (
+      {userAccessLevel >= 50 && Boolean(pointInfoCable.id) && (
         <Cable_edit
           setCables={setCables}
           loadConnections={loadConnections}
@@ -810,7 +813,7 @@ const MyMap = ({
           cables={cables}
         />
       )}
-      {userAccessLevel >= 70 && Boolean(dataFcsTp.body.length) && (
+      {userAccessLevel >= 50 && Boolean(dataFcsTp.body.length) && (
         <FCS_Tp_edit
           setChangeSeqPointTp={setChangeSeqPointTp}
           setPortLabels={setPortLabels}

@@ -224,25 +224,26 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
     let number = Math.random();
     return number;
   }
+  const userAccessLevel = getSessionItem('user').access_level;
 
   return (
     <ModalWithTitle title={'Edit: ' + form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
       <Box component="form" display="flex" gap={1} alignItems="flex-start" flexDirection="column">
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomButton disabled={!isChange} onClick={saveChanges}>
+          {userAccessLevel >= 60 &&<CustomButton disabled={!isChange} onClick={saveChanges}>
             Save changes
-          </CustomButton>
-          <CustomButton disabled={loggedIn} onClick={() => OnClickLogin()}>
+          </CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton disabled={loggedIn} onClick={() => OnClickLogin()}>
             Login
-          </CustomButton>
-          <CustomButton disabled={!loggedIn} onClick={() => OnClickLogout()}>
+          </CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton disabled={!loggedIn} onClick={() => OnClickLogout()}>
             Logout
-          </CustomButton>
-          <CustomButton onClick={() => OnClickComments(pointInfoCable)}>Comments</CustomButton>
-          <CustomButton disabled={isCompleted} onClick={() => OnClickComplete()}>
+          </CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickComments(pointInfoCable)}>Comments</CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton disabled={isCompleted} onClick={() => OnClickComplete()}>
             Mark as Complete
-          </CustomButton>
-          <CustomButton onClick={() => OnClickPictures()}>Pictures</CustomButton>
+          </CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickPictures()}>Pictures</CustomButton>}
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
           <CustomInput label="ID" name="name_id" onChange={onChange} value={form.name_id} />

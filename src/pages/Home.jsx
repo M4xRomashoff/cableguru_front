@@ -72,13 +72,13 @@ const Home = ({ setMenuLabel }) => {
       {projectModal && <NewProject onClose={onCloseNewProject} />}
       {delProjectModal && <DelProject onClose={onCloseDelProject} />}
       <Box gap={2} display="flex" flexDirection="column" alignItems="flex-start" width="fit-content">
-        <Selector sx={{ width: '250px' }} onChange={changeUserProject} value={userProject} label="Select User Project" fields={{ label: 'dbName', value: 'id' }} options={userDb} />
+        <Selector sx={{ width: '250px' }} onChange={changeUserProject} value={userProject} label="Select Project" fields={{ label: 'dbName', value: 'id' }} options={userDb} />
         <Box gap={2} display="flex" flexDirection="row" alignItems="flex-start" width="fit-content">
           <CustomButton onClick={goToProject}>Go to Project</CustomButton>
-          {userAccessLevel >= 75 && <CustomButton onClick={newProject}>New Project</CustomButton>}
-          {userAccessLevel >= 75 && <CustomButton onClick={delProject}>Delete Project</CustomButton>}
+          {userAccessLevel >= 79 && <CustomButton onClick={newProject}>New Project</CustomButton>}
+          {userAccessLevel >= 79 && <CustomButton onClick={delProject}>Delete Project</CustomButton>}
         </Box>
-        <AdminControls />
+        {userAccessLevel >= 77 &&<AdminControls />}
       </Box>
     </Box>
   );
