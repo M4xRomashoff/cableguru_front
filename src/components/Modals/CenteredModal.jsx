@@ -3,7 +3,7 @@ import {
   Box, Modal, styled,
 } from '@mui/material';
 
-const StyledContainer = styled(Box)({
+const StyledContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -12,8 +12,13 @@ const StyledContainer = styled(Box)({
   transform: 'translate(-50%, -50%)',
   backgroundColor: '#fff',
   boxShadow: 24,
-  width: '65vw',
-});
+  [theme.breakpoints.down('md')]: {
+    width: '100vw',
+  },
+  [theme.breakpoints.up('md')]: {
+    width: '65vw',
+  },
+}));
 
 export default function CenteredModal({
   children, close, open, sx, containerSx,
