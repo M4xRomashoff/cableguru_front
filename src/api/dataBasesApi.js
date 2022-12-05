@@ -682,19 +682,6 @@ export async function downloadPicturesLinks(id, type) {
   return await API.get(`/getPicture/${project?.dbName},${id},${type}`).then(({ data }) => data);
 }
 
-export async function downloadPicture(link) {
-  const encodedLink = encodeURIComponent(link);
-  let project = getSessionItem('project');
-  const response = await API.get(`/getPicture/${project?.dbName},${encodedLink}/link`);
-
-  // let myImage = new Image();
-  // const href = window.URL.createObjectURL([response.data],{type: 'image/jpeg' })
-  // myImage.setAttribute("href",href);
-  // myImage.setAttribute("download","file.jpg");
-
-  return response;
-}
-
 export async function deletePicture(item) {
   let itemType = 'sp';
   if (item.connector) itemType = 'tp';

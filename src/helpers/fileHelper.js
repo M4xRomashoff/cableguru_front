@@ -39,3 +39,9 @@ export function removeFileFromFileList(index, input) {
 
   input.files = dt.files;
 }
+
+export function removeAllInputFiles(input) {
+  const dt = new DataTransfer();
+
+  input.files = dt.files;
+}
