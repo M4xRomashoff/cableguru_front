@@ -24,7 +24,8 @@ import useApi from './hooks/useApi';
 import BackdropLoading from './components/BackdropLoading';
 import './components/leaflet-draw-toolbar/leaflet.draw.css';
 import { makeStyles } from '@material-ui/core';
-import cursorMarker from './components/icons/sp_o.png'
+import cursorMarkerSP from './components/icons/sp_slate.png'
+import cursorMarkerTP from './components/icons/hub_slate.png'
 
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
@@ -418,7 +419,13 @@ const MyMap = ({
     map.pm.setGlobalOptions({ cursorMarker: false, templineStyle: { color: 'red' }, continueDrawing: false });
 
     map.on('pm:drawstart', (e) => {
-      e.workingLayer._icon.src = cursorMarker
+      console.log('e',e);
+      if (e.shape === 'SP') {e.workingLayer._icon.src = cursorMarkerSP;
+      e.workingLayer._icon.style="margin-left: -12px; margin-top: -41px; width: 25px; height: 25px; transform: translate3d(641px, 188px, 0px); z-index: 188;"}
+
+      if (e.shape === 'TP') {e.workingLayer._icon.src = cursorMarkerTP;
+        e.workingLayer._icon.style="margin-left: -12px; margin-top: -41px; width: 30px; height: 20px; transform: translate3d(641px, 188px, 0px); z-index: 188;"}
+
       setDrawingCable(true);
     });
 

@@ -5,14 +5,14 @@ import { Box } from '@mui/material';
 import ModalWithTitle from './ModalWithTitle';
 import CustomInput from '../Inputs';
 import CustomButton from '../Button';
-import { uploadPicture, downloadPicture, deletePicture } from '../../api/dataBasesApi';
+import { uploadPicture, downloadPicturesLinks, deletePicture, downloadPicture } from '../../api/dataBasesApi';
 import { logAddInfo } from '../../api/logFileApi';
 
 const PicturesModal = ({ onClose, picturesInfo }) => {
   const [file, setFile] = useState();
-  const [images, setImages] = useState([]);
-  // const urlHead = 'http://localhost:5555';
-  const urlHead = 'https://80.78.244.5:5555';
+  const [imagesLinks, setImagesLinks] = useState([]);
+  const urlHead = 'http://localhost:5555';
+  //const urlHead = 'https://80.78.244.5:5555';
 
   function keyGen() {
     let number = Math.random();
@@ -20,9 +20,12 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
   }
 
   async function getImages(id, type) {
-    const images = await downloadPicture(id, type);
-    setImages(images);
-    return images;
+    const imagesLinks = await downloadPicturesLinks(id, type);
+    setImagesLinks(imagesLinks);
+
+    console.log('links',imagesLinks);
+
+    return imagesLinks;
   }
 
   useEffect(() => {
@@ -37,6 +40,12 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
     }
   };
 
+  async function getPicture(link){
+    const response = await downloadPicture(link);
+    console.log('resp',response);
+    //return image;
+  }
+
   async function handleUploadClick() {
     const res = await uploadPicture(file, picturesInfo);
     logAddInfo(picturesInfo.name_id, 'Picture Uploaded', file?.name);
@@ -46,14 +55,14 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
   }
 
   async function onClickDelete(index) {
-    const deleteImage = deletePicture(images[index]);
+    const deleteImage = deletePicture(imagesLinks[index]);
     let type = 'sp';
     if (picturesInfo.connector) type = 'tp';
     const imagesFrom = getImages(picturesInfo.id, type);
   }
 
   async function onImageClick(index) {
-    const url = urlHead + images[index].dir;
+    const url = urlHead + imagesLinks[index].dir;
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
   }
@@ -64,10 +73,10 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
         <CustomInput type={'file'} accept={'image/*'} onChange={handleFileChange} />
         <CustomButton onClick={handleUploadClick}>Upload Picture</CustomButton>
         <Box display="flex" gap={2} flexDirection="column">
-          {Boolean(images.length > 0) &&
-            images.map((image, index) => (
+          {Boolean(imagesLinks.length > 0) &&
+            imagesLinks.map((image, index) => (
               <Box display="flex" gap={2} flexDirection="row" key={keyGen()}>
-                <img src={urlHead + image.dir} width="250" height="250" onClick={() => onImageClick(index)} key={keyGen()} />
+                <img src={getPicture(image.dir)} width="250" height="250" onClick={() => onImageClick(index)} key={keyGen()} />
                 <p>{image.user_name}</p>
                 <p>uploaded on : </p>
                 <p>{image.date.slice(0, 10)}</p>
