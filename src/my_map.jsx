@@ -24,7 +24,8 @@ import useApi from './hooks/useApi';
 import BackdropLoading from './components/BackdropLoading';
 import './components/leaflet-draw-toolbar/leaflet.draw.css';
 import { makeStyles } from '@material-ui/core';
-import cursorMarker from './components/icons/sp_o.png'
+import cursorMarkerSP from './components/icons/sp_slate.png'
+import cursorMarkerTP from './components/icons/hub_slate.png'
 
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
@@ -188,6 +189,11 @@ const MyMap = ({
 
   const [picturesInfo, setPicturesInfo] = useState(false);
   const [portLabels, setPortLabels] = useState({});
+
+  let userAccessLevel = 0;
+  const userAccessLevelTemp = getSessionItem('user');
+  if (userAccessLevelTemp !== null) userAccessLevel = userAccessLevelTemp.access_level;
+
 
   function getLayerBySpId(spId, myMap) {
     let _leaflet_id = 0;
@@ -411,6 +417,7 @@ const MyMap = ({
   }
 
   const whenMapReady = ({ target: mapInstance }) => {
+    if (userAccessLevel >= 77){
     const map = mapInstance;
     let changeArr = [];
     setMap(mapInstance);
@@ -418,7 +425,13 @@ const MyMap = ({
     map.pm.setGlobalOptions({ cursorMarker: false, templineStyle: { color: 'red' }, continueDrawing: false });
 
     map.on('pm:drawstart', (e) => {
-      e.workingLayer._icon.src = cursorMarker
+      console.log('e',e);
+      if (e.shape === 'SP') {e.workingLayer._icon.src = cursorMarkerSP;
+      e.workingLayer._icon.style="margin-left: -12px; margin-top: -41px; width: 25px; height: 25px; transform: translate3d(641px, 188px, 0px); z-index: 188;"}
+
+      if (e.shape === 'TP') {e.workingLayer._icon.src = cursorMarkerTP;
+        e.workingLayer._icon.style="margin-left: -12px; margin-top: -41px; width: 30px; height: 20px; transform: translate3d(641px, 188px, 0px); z-index: 188;"}
+
       setDrawingCable(true);
     });
 
@@ -577,7 +590,7 @@ const MyMap = ({
       if (e.shape === 'SP') {
         const newMarker = AddMarkerSP(e.layer._latlng);
         await addSpItem(newMarker);
-        const newItem = logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
+        logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
 
         mapInstance.removeLayer(e.marker);
         loadMarkersSp();
@@ -585,14 +598,14 @@ const MyMap = ({
       if (e.shape === 'TP') {
         const newMarker = AddMarkerTP(e.layer._latlng);
         await addTpItem(newMarker);
-        const newItem = logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
+        logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
         mapInstance.removeLayer(e.marker);
         loadMarkersTp();
       }
       if (e.shape === 'Cable') {
         const newMarker = CreateCableItem(e.layer._latlngs);
         await addCableItem(newMarker);
-        const newItem = logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
+        logAddInfo(newMarker.name_id, 'Splice Point Added', 'new');
         mapInstance.removeLayer(e.marker);
         loadCables();
       }
@@ -601,7 +614,7 @@ const MyMap = ({
     if (setMap) {
       setMap(mapInstance);
     }
-  };
+  };};
 
   const { isLoading: isSpLoading, makeRequest: getSpDataRequest } = useApi({
     request: () => getSpData(pointInfoFCS.id),
@@ -663,9 +676,6 @@ const MyMap = ({
   };
 
   const project = getSessionItem('project');
-  let userAccessLevel = 0;
-  const userAccessLevelTemp = getSessionItem('user');
-  if (userAccessLevelTemp !== null) userAccessLevel = userAccessLevelTemp.access_level;
 
   function onClickTraceFiber() {
     setTraceIsOpen(true);
@@ -777,7 +787,7 @@ const MyMap = ({
         />
       )}
 
-      {userAccessLevel >= 70 && Boolean(dataFcs.body.length) && (
+      {userAccessLevel >= 50 && Boolean(dataFcs.body.length) && (
         <FCS_edit
           setChangeSeqPoint={setChangeSeqPoint}
           setPicturesInfo={setPicturesInfo}
@@ -792,7 +802,7 @@ const MyMap = ({
           setSpliceFibersPoint={setSpliceFibersPoint}
         />
       )}
-      {userAccessLevel >= 70 && Boolean(pointInfoCable.id) && (
+      {userAccessLevel >= 50 && Boolean(pointInfoCable.id) && (
         <Cable_edit
           setCables={setCables}
           loadConnections={loadConnections}
@@ -803,7 +813,7 @@ const MyMap = ({
           cables={cables}
         />
       )}
-      {userAccessLevel >= 70 && Boolean(dataFcsTp.body.length) && (
+      {userAccessLevel >= 50 && Boolean(dataFcsTp.body.length) && (
         <FCS_Tp_edit
           setChangeSeqPointTp={setChangeSeqPointTp}
           setPortLabels={setPortLabels}

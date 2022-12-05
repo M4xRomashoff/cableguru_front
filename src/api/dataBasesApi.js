@@ -677,7 +677,7 @@ export async function uploadPicture(file, item) {
   if (responseOK) return await response.data;
 }
 
-export async function downloadPicture(id, type) {
+export async function downloadPicturesLinks(id, type) {
   let project = getSessionItem('project');
   return await API.get(`/getPicture/${project?.dbName},${id},${type}`).then(({ data }) => data);
 }

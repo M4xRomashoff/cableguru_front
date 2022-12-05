@@ -1,73 +1,81 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../Home/Home.css';
-// import './flex.css';
 import { Box } from '@mui/material';
 import ModalWithTitle from './ModalWithTitle';
-import CustomInput from '../Inputs';
 import CustomButton from '../Button';
-import { uploadPicture, downloadPicture, deletePicture } from '../../api/dataBasesApi';
+import { deletePicture, downloadPicturesLinks, uploadPicture } from '../../api/dataBasesApi';
 import { logAddInfo } from '../../api/logFileApi';
+import { ImageFile } from '../ImageFile';
+import { getSessionItem } from '../../helpers/storage';
+import { FileUpload } from '../File/FileUpload';
+import { PublishSharp } from '@mui/icons-material';
 
 const PicturesModal = ({ onClose, picturesInfo }) => {
   const [file, setFile] = useState();
-  const [images, setImages] = useState([]);
-  // const urlHead = 'http://localhost:5555';
-  const urlHead = 'https://80.78.244.5:5555';
+  const [imagesLinks, setImagesLinks] = useState([]);
 
-  function keyGen() {
-    let number = Math.random();
-    return number;
-  }
-
-  async function getImages(id, type) {
-    const images = await downloadPicture(id, type);
-    setImages(images);
-    return images;
+  async function getImages(type) {
+    const imagesLinks = await downloadPicturesLinks(picturesInfo.id, type);
+    setImagesLinks(imagesLinks);
   }
 
   useEffect(() => {
     let type = 'sp';
     if (picturesInfo.connector) type = 'tp';
-    const imagesFrom = getImages(picturesInfo.id, type);
+
+    getImages(type);
   }, []);
 
-  const handleFileChange = (e) => {
-    if (e.event.target.files) {
-      setFile(e.event.target.files[0]);
-    }
-  };
+  function getPicture(link) {
+    const encodedLink = encodeURIComponent(link);
+    let project = getSessionItem('project');
+    return `/getPicture/${project?.dbName},${encodedLink}/link`;
+  }
 
   async function handleUploadClick() {
-    const res = await uploadPicture(file, picturesInfo);
+    await uploadPicture(file, picturesInfo);
     logAddInfo(picturesInfo.name_id, 'Picture Uploaded', file?.name);
     let type = 'sp';
     if (picturesInfo.connector) type = 'tp';
-    const imagesFrom = getImages(picturesInfo.id, type);
+    setFile()
+    getImages(type);
   }
 
   async function onClickDelete(index) {
-    const deleteImage = deletePicture(images[index]);
+    const sure = window.confirm('Are you sure you want to delete?')
+
+    if (!sure) return
+
+    await deletePicture(imagesLinks[index]);
     let type = 'sp';
     if (picturesInfo.connector) type = 'tp';
-    const imagesFrom = getImages(picturesInfo.id, type);
-  }
-
-  async function onImageClick(index) {
-    const url = urlHead + images[index].dir;
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-    if (newWindow) newWindow.opener = null;
+    getImages(type);
   }
 
   return (
-    <ModalWithTitle title={'Pictures for :' + picturesInfo.name_id} containerSx={{ width: 600, height: 600 }} close={onClose} open>
-      <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column">
-        <CustomInput type={'file'} accept={'image/*'} onChange={handleFileChange} />
-        <CustomButton onClick={handleUploadClick}>Upload Picture</CustomButton>
-        <Box display="flex" gap={2} flexDirection="column">
-          {Boolean(images.length > 0) &&
-            images.map((image, index) => (
-              <Box display="flex" gap={2} flexDirection="row" key={keyGen()}>
-                <img src={urlHead + image.dir} width="250" height="250" onClick={() => onImageClick(index)} key={keyGen()} />
+    <ModalWithTitle
+      title={'Pictures for :' + picturesInfo.name_id}
+      containerSx={{ width: 600, height: 600 }}
+      close={onClose}
+      open
+    >
+      <Box component='form' display='flex' gap={2} alignItems='flex-start' flexDirection='column'>
+        <FileUpload
+          buttonVariant='contained'
+          setFile={(_, file) => setFile(file)}
+          id='file'
+          name='file'
+          files={[file]}
+          extensions={['png', 'svg', 'jpeg']}
+          endIcon={<PublishSharp />}
+          label='New image'
+        />
+        {file && <CustomButton color="warning" onClick={handleUploadClick}>Upload Picture</CustomButton>}
+        <Box display='flex' gap={2} flexDirection='column'>
+          {Boolean(imagesLinks.length > 0) &&
+            imagesLinks.map((image, index) => (
+              <Box display='flex' flexWrap='wrap' gap={2} flexDirection='row' key={image.dir}>
+                <ImageFile link={getPicture(image.dir)} />
                 <p>{image.user_name}</p>
                 <p>uploaded on : </p>
                 <p>{image.date.slice(0, 10)}</p>
