@@ -10,7 +10,6 @@ function convertCRS(lat, long) {
 }
 
 export async function getDbList() {
-  console.log('get dbs');
   return await API.get('/data-bases').then(({ data }) => data);
 }
 
@@ -147,7 +146,6 @@ export async function saveTpPortData(tpId, data) {
 }
 
 export async function updateSeqNumbers(type, id, data) {
-  console.log('data', data);
   const project = getSessionItem('project');
   const { user_id, dbName } = project;
 
@@ -645,6 +643,33 @@ export async function deleteCableItem(itemId) {
   if (responseOK) return await response.data;
 }
 
+export async function uploadDocument(file) {
+  const form = new FormData();
+  form.append('title', file.name);
+  form.append('file', file);
+
+  const project = getSessionItem('project');
+  const { user_id, dbName } = project;
+  const user = getSessionItem('user');
+  const { user_name } = user;
+
+  let url = '/uploadDocument/';
+  let options = {
+    method: 'POST',
+    url,
+    data: form,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      dbname: dbName,
+      userid: user_id,
+      username: user_name,
+    },
+  };
+  let response = await API_multipart(options);
+  let responseOK = response && response.status === 200 && response.statusText === 'OK';
+
+  if (responseOK) return await response.data;
+}
 export async function uploadPicture(file, item) {
   const form = new FormData();
   form.append('title', file.name);
@@ -680,6 +705,32 @@ export async function uploadPicture(file, item) {
 export async function downloadPicturesLinks(id, type) {
   let project = getSessionItem('project');
   return await API.get(`/getPicture/${project?.dbName},${id},${type}`).then(({ data }) => data);
+}
+
+export async function downloadDocumentsLinks() {
+  let project = getSessionItem('project');
+  return await API.get(`/getDocument/${project?.dbName}`).then(({ data }) => data);
+}
+
+export async function deleteDocument(item) {
+  const project = getSessionItem('project');
+  const { user_id, dbName } = project;
+
+  let url = '/deleteDocument/';
+  let options = {
+    method: 'DELETE',
+    url,
+    data: {
+      userId: user_id,
+      dbName: dbName,
+      dir: item.dir,
+      id:item.id,
+    },
+  };
+  let response = await API_multipart(options);
+  let responseOK = response && response.status === 200 && response.statusText === 'OK';
+
+  if (responseOK) return await response.data;
 }
 
 export async function deletePicture(item) {

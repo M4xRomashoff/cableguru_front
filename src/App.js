@@ -38,6 +38,7 @@ function App() {
   const [traceIsOpen, setTraceIsOpen] = useState(false);
   const [routeDetailsIsOpen, setRouteDetailsIsOpen] = useState(false);
   const [menuLabel, setMenuLabel] = useState('Home: Control Panel');
+  const [documents, setDocuments] = useState(false);
 
   return (
     <div className="App">
@@ -46,6 +47,7 @@ function App() {
         <Redirect setUserStore={setUserStore} userStore={userStore} />
         {userStore.id && (
           <Header
+            setDocuments={setDocuments}
             setMenuLabel={setMenuLabel}
             menuLabel={menuLabel}
             setLb={setLb}
@@ -66,6 +68,8 @@ function App() {
             path="/map"
             element={
               <MyMapContainer
+                documents={documents}
+                setDocuments={setDocuments}
                 traceIsOpen={traceIsOpen}
                 routeDetailsIsOpen={routeDetailsIsOpen}
                 setRouteDetailsIsOpen={setRouteDetailsIsOpen}

@@ -11,9 +11,9 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useNavigate } from 'react-router-dom';
 
-export default function TemporaryDrawer({ isOpen, onClose, setLb, setSetting, setSearch, setPrint, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, setMenuLabel }) {
+export default function TemporaryDrawer({ isOpen, onClose, setLb, setSetting, setSearch, setPrint, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, setMenuLabel, setDocuments }) {
   const list1 = ['Home', 'Fiber Route', 'Fiber Route Details', 'Search', 'Loss & Budget'];
-  const list2 = ['Print', 'History', 'Statistics'];
+  const list2 = ['Print', 'History', 'Documents'];
   const list3 = ['Settings', 'Contact Us'];
 
   const navigate = useNavigate();
@@ -47,8 +47,8 @@ export default function TemporaryDrawer({ isOpen, onClose, setLb, setSetting, se
       case 'Loss & Budget':
         setLb(true);
         break;
-      case 'Statistics':
-        console.log('Statistics');
+      case 'Documents':
+        setDocuments(true);
         break;
       case 'Share Project':
         console.log('Share Project');

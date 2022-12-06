@@ -14,13 +14,13 @@ import { useUserStore } from '../store';
 import CustomButton from './Button';
 import TemporaryDrawer from './HeaderMenu';
 import { useState } from 'react';
-
+import logo from './icons/cableguru_logo_60.png'
 function LogoutClick() {
   clearSession();
   refreshPage();
 }
 
-export default function Header({ setLb, setSetting, setSearch, setPrint, setHistory, setRouteDetailsIsOpen, setTraceIsOpen, menuLabel, setMenuLabel }) {
+export default function Header({ setLb, setSetting, setSearch, setPrint, setHistory, setRouteDetailsIsOpen, setTraceIsOpen, menuLabel, setMenuLabel, setDocuments }) {
   const { userStore } = useUserStore();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = useState(false);
@@ -37,6 +37,7 @@ export default function Header({ setLb, setSetting, setSearch, setPrint, setHist
   return (
     <Box sx={{ flexGrow: 1 }}>
       <TemporaryDrawer
+        setDocuments={setDocuments}
         setMenuLabel={setMenuLabel}
         isOpen={openMenu}
         onClose={setOpenMenu}
@@ -53,6 +54,7 @@ export default function Header({ setLb, setSetting, setSearch, setPrint, setHist
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => setOpenMenu(true)}>
             <MenuIcon />
           </IconButton>
+          <img src={logo}/>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {menuLabel}
           </Typography>

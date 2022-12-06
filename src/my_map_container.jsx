@@ -8,10 +8,11 @@ import SettingsModal from './components/Modals/SettingsModal';
 import SearchModal from './components/Modals/SearchModal';
 import PrintModal from './components/Modals/PrintModal';
 import HistoryModal from './components/Modals/HistoryModal';
+import DocumentsModal from './components/Modals/DocumentsModal';
 
 let centerDefault = [51.515, -0.09];
 
-function MyMapContainer({ lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
+function MyMapContainer({ documents, setDocuments, lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
   const [center, setCenter] = useState([]);
   const [readySp, setReadySp] = useState(false);
   const [readyTp, setReadyTp] = useState(false);
@@ -160,6 +161,9 @@ function MyMapContainer({ lb, setLb, setSetting, settings, search, setSearch, pr
   const onCloseHistoryModal = () => {
     setHistory(false);
   };
+  const onCloseDocumentsModal = () => {
+    setDocuments(false);
+  };
   return (
     <div>
       {lb && <LossAndBudgetModal lb={lb} setLb={setLb} onClose={onCloseLossAndBudgetModal} markersTp={markersTP} markersSp={markersSP} />}
@@ -167,6 +171,7 @@ function MyMapContainer({ lb, setLb, setSetting, settings, search, setSearch, pr
       {search && <SearchModal onClose={onCloseSearchModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
       {print && <PrintModal onClose={onClosePrintModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
       {history && <HistoryModal onClose={onCloseHistoryModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
+      {documents && <DocumentsModal onClose={onCloseDocumentsModal}  />}
 
       <MyData />
       {readyCab && readyCon && readyTp && readySp && (
