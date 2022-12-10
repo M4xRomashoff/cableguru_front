@@ -103,6 +103,7 @@ function getIsCompleted(state) {
 }
 
 const FCS_Tp_edit = ({
+  l,
   setChangeSeqPointTp,
   onClose,
   setPointInfo,
@@ -140,18 +141,18 @@ const FCS_Tp_edit = ({
 
   useEffect(() => {
     setStateOptions([
-      { label: 'Placed Hub', id: 0, value: 0 },
-      { label: 'Connected Hub', id: 1, value: 1 },
-      { label: 'Assigned Hub', id: 2, value: 2 },
-      { label: 'Ready Hub', id: 3, value: 3 },
-      { label: 'Placed Node', id: 4, value: 4 },
-      { label: 'Connected Node', id: 5, value: 5 },
-      { label: 'Assigned Node', id: 6, value: 6 },
-      { label: 'Ready Node', id: 7, value: 7 },
-      { label: 'Placed Terminal', id: 8, value: 8 },
-      { label: 'Connected Terminal', id: 9, value: 9 },
-      { label: 'Assigned Terminal', id: 10, value: 10 },
-      { label: 'Ready Terminal', id: 11, value: 11 },
+      { label: l.Placed_Hub, id: 0, value: 0 },
+      { label: l.Connected_Hub, id: 1, value: 1 },
+      { label: l.Assigned_Hub, id: 2, value: 2 },
+      { label: l.Ready_Hub, id: 3, value: 3 },
+      { label: l.Placed_Node, id: 4, value: 4 },
+      { label: l.Connected_Node, id: 5, value: 5 },
+      { label: l.Assigned_Node, id: 6, value: 6 },
+      { label: l.Ready_Node, id: 7, value: 7 },
+      { label: l.Placed_Terminal, id: 8, value: 8 },
+      { label: l.Connected_Terminal, id: 9, value: 9 },
+      { label: l.Assigned_Terminal, id: 10, value: 10 },
+      { label: l.Ready_Terminal, id: 11, value: 11 },
     ]);
     setConnectorOptions([
       { label: 'SC/APC', id: 0, value: 'SC/APC' },
@@ -164,20 +165,20 @@ const FCS_Tp_edit = ({
       { label: 'Mixed', id: 2, value: 'Mixed' },
     ]);
     setCapacityOptions([
-      { label: '2 ports', id: 0, value: 2 },
-      { label: '4 ports', id: 1, value: 4 },
-      { label: '6 ports', id: 2, value: 6 },
-      { label: '12 ports', id: 3, value: 12 },
-      { label: '24 ports', id: 4, value: 24 },
-      { label: '36 ports', id: 5, value: 36 },
-      { label: '48 ports', id: 6, value: 48 },
-      { label: '60 ports', id: 7, value: 60 },
-      { label: '72 ports', id: 8, value: 72 },
-      { label: '96 ports', id: 9, value: 96 },
-      { label: '144 ports', id: 10, value: 144 },
-      { label: '288 ports', id: 11, value: 288 },
-      { label: '432 ports', id: 12, value: 432 },
-      { label: '864 ports', id: 13, value: 864 },
+      { label: '2 '+ l.ports, id: 0, value: 2 },
+      { label: '4 '+ l.ports, id: 1, value: 4 },
+      { label: '6 '+ l.ports, id: 2, value: 6 },
+      { label: '12 '+ l.ports, id: 3, value: 12 },
+      { label: '24 '+ l.ports, id: 4, value: 24 },
+      { label: '36 '+ l.ports, id: 5, value: 36 },
+      { label: '48 '+ l.ports, id: 6, value: 48 },
+      { label: '60 '+ l.ports, id: 7, value: 60 },
+      { label: '72 '+ l.ports, id: 8, value: 72 },
+      { label: '96 '+ l.ports, id: 9, value: 96 },
+      { label: '144 '+ l.ports, id: 10, value: 144 },
+      { label: '288 '+ l.ports, id: 11, value: 288 },
+      { label: '432 '+ l.ports, id: 12, value: 432 },
+      { label: '864 '+ l.ports, id: 13, value: 864 },
     ]);
   }, []);
 
@@ -193,14 +194,14 @@ const FCS_Tp_edit = ({
     let lArr = getSessionItem('LoggedInTp');
     lArr.push(pointInfoFCS.id);
     setSessionItem('LoggedInTp', lArr);
-    logAddInfo(pointInfoFCS.name_id, 'login', '-');
+    logAddInfo(pointInfoFCS.name_id, l.login, '-');
   }
   function OnClickLogout() {
     setLoggedIn(false);
     let lArr = getSessionItem('LoggedInTp');
     const filteredArr = lArr.filter((itemId) => itemId !== pointInfoFCS.id);
     setSessionItem('LoggedInTp', filteredArr);
-    logAddInfo(pointInfoFCS.name_id, 'logout', '-');
+    logAddInfo(pointInfoFCS.name_id, l.logout, '-');
   }
 
   async function OnClickComplete() {
@@ -229,7 +230,7 @@ const FCS_Tp_edit = ({
       cloneMarkers.splice(markerIndex, 1, changedMarker);
       loadMarkersTp();
     }
-    logAddInfo(form.name_id, 'completed', 'state changed to completed');
+    logAddInfo(form.name_id, l.completed, l.state_changed_to_completed);
   }
 
   function OnClickComments(pointInfo) {
@@ -296,7 +297,7 @@ const FCS_Tp_edit = ({
         break;
       }
     }
-    logAddInfo(form.name_id, 'Changes Saved', '');
+    logAddInfo(form.name_id, l.Changes_Saved, '');
     setMarkersTp(markersClone);
     setIsChange(false);
   }
@@ -309,40 +310,40 @@ const FCS_Tp_edit = ({
   const userAccessLevel = getSessionItem('user').access_level;
 
   return (
-    <ModalWithTitle title={'Edit: ' + form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
+    <ModalWithTitle title={form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
       <Box component="form" display="flex" gap={1} alignItems="flex-start" flexDirection="column">
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomButton onClick={fullShort}> Full / Short</CustomButton>
+          <CustomButton onClick={fullShort}>{l.Full_Short}</CustomButton>
           {userAccessLevel >= 70 &&<CustomButton disabled={!isChange} onClick={saveChanges}>
-            Save changes
+            {l.Save_changes}
           </CustomButton>}
           {userAccessLevel >= 70 &&<CustomButton disabled={loggedIn} onClick={() => OnClickLogin()}>
-            Login
+            {l.Login}
           </CustomButton>}
           {userAccessLevel >= 70 &&<CustomButton disabled={!loggedIn} onClick={() => OnClickLogout()}>
-            Logout
+            {l.Logout}
           </CustomButton>}
-          {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickSpliceFibers(pointInfoFCS)}>Splice Fibers</CustomButton>}
+          {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickSpliceFibers(pointInfoFCS)}>{l.Splice_Fibers}</CustomButton>}
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickConnections(pointInfoFCS)}>Connections</CustomButton>}
-          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickComments(pointInfoFCS)}>Comments</CustomButton>}
+          {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickConnections(pointInfoFCS)}>{l.Connections}</CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickComments(pointInfoFCS)}>{l.Comments}</CustomButton>}
           {userAccessLevel >= 70 &&<CustomButton disabled={isCompleted} onClick={() => OnClickComplete()}>
-            Mark as Complete
+            {l.Mark_as_Complete}
           </CustomButton>}
-          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickPictures()}>Pictures</CustomButton>}
-          {userAccessLevel >= 70 &&<CustomButton onClick={() => OnClickPortLabels()}>Port Labels</CustomButton>}
-          {userAccessLevel >= 70 &&<CustomButton onClick={() => OnClickSeq()}>Change Sequential Numbers</CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickPictures()}>{l.Pictures}</CustomButton>}
+          {userAccessLevel >= 70 &&<CustomButton onClick={() => OnClickPortLabels()}>{l.Port_Labels}</CustomButton>}
+          {userAccessLevel >= 70 &&<CustomButton onClick={() => OnClickSeq()}>{l.Change_Sequential_Numbers}</CustomButton>}
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomInput label="ID" name="name_id" onChange={onChange} value={form.name_id} />
-          <CustomInput label="Owner" name="owner" onChange={onChange} value={form.owner} />
-          <CustomInput label="Address" name="address" onChange={onChange} value={form.address} />
+          <CustomInput label={l.id} name="name_id" onChange={onChange} value={form.name_id} />
+          <CustomInput label={l.Owner} name="owner" onChange={onChange} value={form.owner} />
+          <CustomInput label={l.Address} name="address" onChange={onChange} value={form.address} />
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomInput label="Manufacturer" name="mfg" onChange={onChange} value={form.mfg} />
-          <CustomInput label="Model" name="model" onChange={onChange} value={form.model} />
-          <CustomInput sx={{ width: '220px' }} select label="Connector" name="connector" onChange={onChange} value={form.connector}>
+          <CustomInput label={l.Manufacturer} name="mfg" onChange={onChange} value={form.mfg} />
+          <CustomInput label={l.Model} name="model" onChange={onChange} value={form.model} />
+          <CustomInput sx={{ width: '220px' }} select label={l.Connector} name="connector" onChange={onChange} value={form.connector}>
             {connectorOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -351,8 +352,8 @@ const FCS_Tp_edit = ({
           </CustomInput>
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomInput label="Access" name="access" onChange={onChange} value={form.access} />
-          <CustomInput sx={{ width: '220px' }} select label="Capacity" name="capacity" onChange={onChange} value={form.capacity}>
+          <CustomInput label={l.Access} name="access" onChange={onChange} value={form.access} />
+          <CustomInput sx={{ width: '220px' }} select label={l.Capacity} name="capacity" onChange={onChange} value={form.capacity}>
             {capacityOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -360,7 +361,7 @@ const FCS_Tp_edit = ({
             ))}
           </CustomInput>
 
-          <CustomInput sx={{ width: '220px' }} select label="State" name="state" onChange={onChange} value={form.state}>
+          <CustomInput sx={{ width: '220px' }} select label={l.State} name="state" onChange={onChange} value={form.state}>
             {stateOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -369,10 +370,10 @@ const FCS_Tp_edit = ({
           </CustomInput>
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomInput disabled label="Birthday" name="birthday" onChange={onChange} value={form.birthday.slice(0, 10)} />
-          <CustomInput disabled label="Last update" name="last_update" onChange={onChange} value={form.last_update.slice(0, 10)} />
-          <CustomInput disabled label="Latitude" name="position" onChange={onChange} value={form.position[0]} />
-          <CustomInput disabled label="Longitude" name="position" onChange={onChange} value={form.position[1]} />
+          <CustomInput disabled label={l.Birthday} name="birthday" onChange={onChange} value={form.birthday.slice(0, 10)} />
+          <CustomInput disabled label={l.Last_update} name="last_update" onChange={onChange} value={form.last_update.slice(0, 10)} />
+          <CustomInput disabled label={l.Latitude} name="position" onChange={onChange} value={form.position[0]} />
+          <CustomInput disabled label={l.Longitude} name="position" onChange={onChange} value={form.position[1]} />
         </Box>
 
         <TableContainer component={Paper}>

@@ -199,14 +199,15 @@ function prepData(allData, markersSp, markersTp) {
   return dataBody;
 }
 
-const LossAndBudgetModal = ({ onClose, markersTp, markersSp }) => {
+const LossAndBudgetModal = ({ l, onClose, markersTp, markersSp }) => {
   const [tpOptions, setTpOptions] = useState([]);
   const [tpValue, setTpValue] = useState('');
   const [portOptions, setPortOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataBody, setDataBody] = useState([]);
 
-  const dataHead = [['Port #', 'Distance', 'OTDR Distance', 'End Point ID', 'End Point Port #', 'Budget 1310', 'Budget 1550', 'number of splices']];
+  // const dataHead = [['Port #', 'Distance', 'OTDR Distance', 'End Point ID', 'End Point Port #', 'Budget 1310', 'Budget 1550', 'number of splices']];
+  const dataHead = [[ l.Port+ ' #', l.Distance, l.OTDR_Distance, l.End_Point, l.End_Point_Port+' #', l.Budget_1310, l.Budget_1550, l.number_of_splices]];
 
   function keyGen() {
     let number = Math.random();
@@ -251,10 +252,10 @@ const LossAndBudgetModal = ({ onClose, markersTp, markersSp }) => {
   };
 
   return (
-    <ModalWithTitle title="Loss & Budget" containerSx={{ width: 800 }} close={onClose} open>
+    <ModalWithTitle title={l.Loss_Budget} containerSx={{ width: 800 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column" onSubmit={handleSubmit}>
         <BackdropLoading isLoading={isLoading} />
-        <CustomInput sx={{ width: '200px' }} select label="Termination Point" name="tp" onChange={onChangeTp} value={tpValue}>
+        <CustomInput sx={{ width: '200px' }} select label={l.Termination_Point} name="tp" onChange={onChangeTp} value={tpValue}>
           {tpOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
@@ -263,7 +264,7 @@ const LossAndBudgetModal = ({ onClose, markersTp, markersSp }) => {
         </CustomInput>
         <CustomButton type="submit">
           {/*isLoading={isLoading}*/}
-          Show data for selected location
+          {l.Show_data_for_selected_location}
         </CustomButton>
         <Box display="flex" gap={2} alignItems="flex-start" flexDirection="column">
           <TableContainer component={Paper}>

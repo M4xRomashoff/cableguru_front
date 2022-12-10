@@ -140,6 +140,7 @@ const useStyles = makeStyles((theme) => ({
 //--------------------------------------------------------------------------------------------------MyMap---------------
 
 const MyMap = ({
+  l,
   setTraceIsOpen,
   routeDetailsIsOpen,
   setRouteDetailsIsOpen,
@@ -554,21 +555,21 @@ const MyMap = ({
     map.pm.Toolbar.copyDrawControl('Marker', {
       name: 'SP',
       block: 'custom',
-      title: 'Add New Splice Point',
+      title: l.Add_New_Splice_Point,
       actions: ['cancel'],
       className: 'icoSplice',
     });
     map.pm.Toolbar.copyDrawControl('Marker', {
       name: 'TP',
       block: 'custom',
-      title: 'Add New Termination Point',
+      title: l.Add_New_Termination_Point,
       actions: ['cancel'],
       className: 'ico',
     });
     map.pm.Toolbar.copyDrawControl('Line', {
       name: 'Cable',
       block: 'custom',
-      title: 'Add New Cable',
+      title: l.Add_New_Cable,
       actions: ['cancel'],
     });
 
@@ -717,7 +718,8 @@ const MyMap = ({
       <BackdropLoading isLoading={isSpLoading || isTpLoading} />
       {portLabels.id &&
         <PortLabelsModal onClose={onClosePortLabels} portLabels={portLabels} getTpDataRequest={getTpDataRequest} />}
-      {routeDetailsIsOpen && <RouteDetails
+      {routeDetailsIsOpen && Boolean(trace.length>0)&&<RouteDetails
+        l={l}
         trace={trace}
         setTrace={setTrace}
         onClose={onCloseRouteDetails}
@@ -726,11 +728,12 @@ const MyMap = ({
         cables={cables}
       />}
       {traceIsOpen &&
-        <TraceFiber trace={trace} setTrace={setTrace} onClose={onCloseTraceFiber} markersTp={markersTP} />}
-      {pointInfo.id && <AddComments onClose={onCloseComment} nameId={pointInfo.name_id} />}
-      {picturesInfo && <PicturesModal onClose={onClosePictures} picturesInfo={picturesInfo} />}
+        <TraceFiber l={l} trace={trace} setTrace={setTrace} onClose={onCloseTraceFiber} markersTp={markersTP} />}
+      {pointInfo.id && <AddComments l={l} onClose={onCloseComment} nameId={pointInfo.name_id} />}
+      {picturesInfo && <PicturesModal l={l} onClose={onClosePictures} picturesInfo={picturesInfo} />}
       {spliceFibersPointTp.id && (
         <SpliceFibersTp
+          l={l}
           dataFcs={dataFcsTp}
           updateState={updateState}
           connections={connections}
@@ -742,6 +745,7 @@ const MyMap = ({
       )}
       {spliceFibersPoint.id && (
         <SpliceFibers
+          l={l}
           dataFcs={dataFcs}
           updateState={updateState}
           connections={connections}
@@ -753,6 +757,7 @@ const MyMap = ({
       )}
       {changeSeqPoint.id && (
         <ChangeSeqNumbersSp
+          l={l}
           dataFcs={dataFcs}
           connections={connections}
           onClose={onCloseChangeSeq}
@@ -763,6 +768,7 @@ const MyMap = ({
       )}
       {changeSeqPointTp.id && (
         <ChangeSeqNumbersTp
+          l={l}
           dataFcs={dataFcsTp}
           connections={connections}
           onClose={onCloseChangeSeqTp}
@@ -773,6 +779,7 @@ const MyMap = ({
       )}
       {connectionsPoint.id && (
         <ConnectionControl
+          l={l}
           getSpDataRequest={getSpDataRequest}
           getTpDataRequest={getTpDataRequest}
           cables={cables}
@@ -789,6 +796,7 @@ const MyMap = ({
 
       {userAccessLevel >= 50 && Boolean(dataFcs.body.length) && (
         <FCS_edit
+          l={l}
           setChangeSeqPoint={setChangeSeqPoint}
           setPicturesInfo={setPicturesInfo}
           setPointInfo={setPointInfo}
@@ -804,6 +812,7 @@ const MyMap = ({
       )}
       {userAccessLevel >= 50 && Boolean(pointInfoCable.id) && (
         <Cable_edit
+          l={l}
           setCables={setCables}
           loadConnections={loadConnections}
           setPointInfo={setPointInfo}
@@ -815,6 +824,7 @@ const MyMap = ({
       )}
       {userAccessLevel >= 50 && Boolean(dataFcsTp.body.length) && (
         <FCS_Tp_edit
+          l={l}
           setChangeSeqPointTp={setChangeSeqPointTp}
           setPortLabels={setPortLabels}
           setPicturesInfo={setPicturesInfo}
@@ -846,7 +856,7 @@ const MyMap = ({
         />
 
         <LayersControl position='topright'>
-          <LayersControl.Overlay checked name='SP'>
+          <LayersControl.Overlay checked name={l.SP}>
             {Boolean(markersSP !== []) && (
               <PrepMarkerListSP
                 editMode={editMode}
@@ -859,7 +869,7 @@ const MyMap = ({
             )}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay checked name='TP'>
+          <LayersControl.Overlay checked name={l.TP}>
             {Boolean(markersTP !== []) && (
               <PrepMarkerListTP
                 editMode={editMode}
@@ -872,7 +882,7 @@ const MyMap = ({
             )}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay checked name='Cables'>
+          <LayersControl.Overlay checked name={l.Cables}>
             {Boolean(cables !== []) && (
               <PrepCablesList
                 editMode={editMode}
@@ -886,7 +896,7 @@ const MyMap = ({
               />
             )}
           </LayersControl.Overlay>
-          <LayersControl.Overlay checked name='Trace'>
+          <LayersControl.Overlay checked name={l.Trace}>
             <PrepTracesList trace={trace} setTrace={setTrace} />
           </LayersControl.Overlay>
         </LayersControl>

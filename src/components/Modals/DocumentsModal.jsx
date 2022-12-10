@@ -10,7 +10,7 @@ import { getSessionItem } from '../../helpers/storage';
 import { FileUpload } from '../File/FileUpload';
 import { PublishSharp } from '@mui/icons-material';
 
-const  DocumentsModal = ({ onClose}) => {
+const  DocumentsModal = ({ l, onClose}) => {
   const [file, setFile] = useState();
   const [docs, setDocs] = useState([]);
 
@@ -52,7 +52,7 @@ const  DocumentsModal = ({ onClose}) => {
 
   return (
     <ModalWithTitle
-      title={'Project documents '}
+      title={l.Project_documents}
       containerSx={{ width: 600, height: 600 }}
       close={onClose}
       open
@@ -66,9 +66,9 @@ const  DocumentsModal = ({ onClose}) => {
           files={[file]}
           extensions={['*']}
           endIcon={<PublishSharp />}
-          label='New Document ...'
+          label={l.New_Document}
         />
-        {file && <CustomButton color="warning" onClick={handleUploadClick}>Upload Document</CustomButton>}
+        {file && <CustomButton color="warning" onClick={handleUploadClick}>{l.Upload_Document}</CustomButton>}
         <Box display='flex' gap={2} flexDirection='column'>
           {Boolean(docs.length > 0) &&
             docs.map((doc, index) => (
@@ -77,10 +77,10 @@ const  DocumentsModal = ({ onClose}) => {
                 <p>uploaded on : </p>
                 <p>{doc.date.slice(0, 10)}</p>
                 <p>by: ({doc.user_name})</p>
-                <CustomButton onClick={() => onClickDelete(index)}> Delete Document </CustomButton>
+                <CustomButton onClick={() => onClickDelete(index)}> {l.Delete_Document} </CustomButton>
               </Box>
             ))}
-          {Boolean(docs.length === 0) && <p> no files ...</p>}
+          {Boolean(docs.length === 0) && <p> {l.No_files}</p>}
         </Box>
       </Box>
     </ModalWithTitle>

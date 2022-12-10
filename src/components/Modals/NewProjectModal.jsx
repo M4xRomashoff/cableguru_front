@@ -41,12 +41,13 @@ const NewProject = ({ onClose }) => {
     let flag = true;
     let existDbs = existDbs = await getDbList();
 
+    if (Array.isArray(existDbs)) console.log('array');
     if (Array.isArray(existDbs)){
     for (let i=0;i<existDbs.length;i++){
-      if (existDbs[i] === {dbName:newName}) {console.log('match!!!!!!!!!!'); flag = false}
+      if (existDbs[i].dbName === newName) {flag = false}
     }}
 
-    if (flag) {alert('please pick different name for new project.  '+newName+' already exists');
+    if (!flag) {alert('please pick different name for new project.  '+newName+' already exists');
     }
     else {
 

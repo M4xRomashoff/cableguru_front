@@ -6,10 +6,28 @@ import Preferences from './components/Preferences/Preferences';
 import Login from './components/Login/Login';
 import Home from './pages/Home';
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { getUserSession } from './helpers/storage';
+import { getSessionItem, getUserSession, setSessionItem } from './helpers/storage';
 import Header from './components/Header';
 import { useUserStore } from './store';
 import ModalDelete from './components/Modals/ModalDelete';
+import langPackRu from './assets/ru.json';
+import langPackEn from './assets/en.json';
+
+
+let userLang = navigator.language ;
+let langDefault = langPackEn;
+
+if (userLang.slice(0,2)==='en') {
+  setSessionItem('lang','en');
+  langDefault=langPackEn;
+
+}
+if (userLang.slice(0,2)==='ru') {
+  setSessionItem('lang','ru');
+  langDefault=langPackRu
+
+}
+
 
 const Redirect = ({ userStore, setUserStore }) => {
   const { pathname } = useLocation();
@@ -17,7 +35,6 @@ const Redirect = ({ userStore, setUserStore }) => {
 
   useEffect(() => {
     const sessionUser = getUserSession();
-
     if (!sessionUser?.accessToken) {
       if (pathname !== '/login') navigate('/login');
 
@@ -29,6 +46,7 @@ const Redirect = ({ userStore, setUserStore }) => {
 };
 
 function App() {
+
   const { userStore, setUserStore } = useUserStore();
   const [lb, setLb] = useState(false);
   const [settings, setSetting] = useState(false);
@@ -37,8 +55,35 @@ function App() {
   const [history, setHistory] = useState(false);
   const [traceIsOpen, setTraceIsOpen] = useState(false);
   const [routeDetailsIsOpen, setRouteDetailsIsOpen] = useState(false);
-  const [menuLabel, setMenuLabel] = useState('Home: Control Panel');
+  const [menuLabel, setMenuLabel] = useState();
   const [documents, setDocuments] = useState(false);
+  const [l,setL]=useState(langDefault);
+
+
+
+
+  React.useEffect(() => {
+    let userLang = navigator.language || navigator.userLanguage;
+    console.log('userLang',userLang);
+
+    if (userLang.split(0,2)==='en') {
+      setSessionItem('lang','ru');
+      setL(langPackRu);
+
+    }
+    if (userLang.split(0,2)==='ru') {
+      setSessionItem('lang','ru');
+      setL(langPackRu);
+    }
+    // check user system for default language
+
+
+
+    setMenuLabel(l.Control_Panel);
+
+  }, [l]);
+
+
 
   return (
     <div className="App">
@@ -47,6 +92,8 @@ function App() {
         <Redirect setUserStore={setUserStore} userStore={userStore} />
         {userStore.id && (
           <Header
+            l={l}
+            setL={setL}
             setDocuments={setDocuments}
             setMenuLabel={setMenuLabel}
             menuLabel={menuLabel}
@@ -61,13 +108,14 @@ function App() {
         )}
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home setMenuLabel={setMenuLabel} />} />
+          <Route path="/" element={<Home setMenuLabel={setMenuLabel}   l={l}/>} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/preferences" element={<Preferences />} />
           <Route
             path="/map"
             element={
               <MyMapContainer
+                l={l}
                 documents={documents}
                 setDocuments={setDocuments}
                 traceIsOpen={traceIsOpen}

@@ -11,14 +11,20 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useNavigate } from 'react-router-dom';
 
-export default function TemporaryDrawer({ isOpen, onClose, setLb, setSetting, setSearch, setPrint, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, setMenuLabel, setDocuments }) {
-  const list1 = ['Home', 'Fiber Route', 'Fiber Route Details', 'Search', 'Loss & Budget'];
-  const list2 = ['Print', 'History', 'Documents'];
-  const list3 = ['Settings', 'Contact Us'];
+export default function TemporaryDrawer({l, isOpen, onClose, setLb, setSetting, setSearch, setPrint, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, setMenuLabel, setDocuments }) {
+
+  // const list1 = ['Home', 'Fiber Route', 'Fiber Route Details', 'Search', 'Loss & Budget'];
+  // const list2 = ['Print', 'History', 'Documents'];
+  // const list3 = ['Settings', 'Contact Us'];
+
+  const list1 = [l.Home, l.Fiber_Route, l.Fiber_Route_Details, l.Search, l.Loss_Budget];
+  const list2 = [l.Print, l.History, l.Documents];
+  const list3 = [l.Settings, l.Contact_Us];
+
 
   const navigate = useNavigate();
   const onClickHome = () => {
-    setMenuLabel('Home: Control Panel');
+    setMenuLabel(l.Control_Panel);
     navigate(`/`);
   };
 
@@ -32,38 +38,34 @@ export default function TemporaryDrawer({ isOpen, onClose, setLb, setSetting, se
 
   function handleClick(text) {
     switch (text) {
-      case 'Home':
+      case l.Home:
         onClickHome();
         break;
-      case 'Fiber Route':
+      case l.Fiber_Route:
         setTraceIsOpen(true);
         break;
-      case 'Fiber Route Details':
+      case l.Fiber_Route_Details:
         setRouteDetailsIsOpen(true);
         break;
-      case 'History':
+      case l.History:
         setHistory(true);
         break;
-      case 'Loss & Budget':
+      case l.Loss_Budget:
         setLb(true);
         break;
-      case 'Documents':
+      case l.Documents:
         setDocuments(true);
         break;
-      case 'Share Project':
-        console.log('Share Project');
-        break;
-      case 'Search':
-        console.log('search pressed!');
+      case  l.Search:
         setSearch(true);
         break;
-      case 'Print':
+      case l.Print:
         setPrint(true);
         break;
-      case 'Settings':
+      case l.Settings:
         setSetting(true);
         break;
-      case 'Contact Us':
+      case l.Contact_Us:
         console.log('Contact Us');
         break;
       default:

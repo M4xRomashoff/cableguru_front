@@ -51,7 +51,7 @@ function getIsCompleted(state) {
   return true;
 }
 
-const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables, loadConnections, setCables }) => {
+const Cable_edit = ({ l, setPointInfo, onClose, pointInfoCable, cables, loadCables, loadConnections, setCables }) => {
   const [loggedIn, setLoggedIn] = useState(getLoggedInCables(pointInfoCable.id));
   const [isChange, setIsChange] = useState(false);
   const [isCompleted, setIsCompleted] = useState(getIsCompleted(pointInfoCable.state));
@@ -96,38 +96,38 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
       { label: 'Microfiber Dry', id: 9, value: 'Microfiber Dry' },
     ]);
     setCTypeOptions([
-      { label: 'Ug Cable', id: 0, value: 'Ug Cable' },
-      { label: 'Ug Armored Cable', id: 1, value: 'Ug Armored Cable' },
-      { label: 'Arial Cable', id: 2, value: 'Arial Cable' },
-      { label: 'Self-Support Cable', id: 3, value: 'Self-Support Cable' },
-      { label: 'Sea Grade Cable', id: 4, value: 'Sea Grade Cable' },
-      { label: 'Fire Grade Cable', id: 5, value: 'Fire Grade Cable' },
-      { label: 'Drop cable', id: 6, value: 'Drop cable' },
-      { label: 'Inside Plant cable', id: 7, value: 'Inside Plant cable' },
+      { label: l.U_Cable, id: 0, value: 'Ug Cable' },
+      { label: l.Ug_Armored_Cable, id: 1, value: 'Ug Armored Cable' },
+      { label: l.Arial_Cable, id: 2, value: 'Arial Cable' },
+      { label: l.Self_Support_Cable, id: 3, value: 'Self-Support Cable' },
+      { label: l.Sea_Grade_Cable, id: 4, value: 'Sea Grade Cable' },
+      { label: l.Fire_Grade_Cable, id: 5, value: 'Fire Grade Cable' },
+      { label: l.Drop_cable, id: 6, value: 'Drop cable' },
+      { label: l.Inside_Plant_cable, id: 7, value: 'Inside Plant cable' },
     ]);
     setStateOptions([
-      { label: 'Designed ', id: 0, value: 0 },
-      { label: 'Under Construction', id: 1, value: 1 },
-      { label: 'Placed', id: 2, value: 2 },
-      { label: 'Active', id: 3, value: 3 },
-      { label: 'Abandoned', id: 4, value: 4 },
+      { label: l.Designed, id: 0, value: 0 },
+      { label: l.Under_Construction, id: 1, value: 1 },
+      { label: l.Placed, id: 2, value: 2 },
+      { label: l.Active, id: 3, value: 3 },
+      { label: l.Abandoned, id: 4, value: 4 },
     ]);
     setCapacityOptions([
-      { label: '1 fiber', id: 0, value: 1 },
-      { label: '2 fibers', id: 1, value: 2 },
-      { label: '4 fibers', id: 2, value: 4 },
-      { label: '6 fibers', id: 3, value: 6 },
-      { label: '12 fibers', id: 4, value: 12 },
-      { label: '24 fibers', id: 5, value: 24 },
-      { label: '36 fibers', id: 6, value: 36 },
-      { label: '48 fibers', id: 7, value: 48 },
-      { label: '72 fibers', id: 8, value: 72 },
-      { label: '96 fibers', id: 9, value: 96 },
-      { label: '144 fibers', id: 10, value: 144 },
-      { label: '216 fibers', id: 10, value: 216 },
-      { label: '288 fibers', id: 11, value: 288 },
-      { label: '432 fibers', id: 12, value: 432 },
-      { label: '864 fibers', id: 13, value: 864 },
+      { label: '1 '+l.fibers, id: 0, value: 1 },
+      { label: '2 '+l.fibers, id: 1, value: 2 },
+      { label: '4 '+l.fibers, id: 2, value: 4 },
+      { label: '6 '+l.fibers, id: 3, value: 6 },
+      { label: '12 '+l.fibers, id: 4, value: 12 },
+      { label: '24 '+l.fibers, id: 5, value: 24 },
+      { label: '36 '+l.fibers, id: 6, value: 36 },
+      { label: '48 '+l.fibers, id: 7, value: 48 },
+      { label: '72 '+l.fibers, id: 8, value: 72 },
+      { label: '96 '+l.fibers, id: 9, value: 96 },
+      { label: '144 '+l.fibers, id: 10, value: 144 },
+      { label: '216 '+l.fibers, id: 10, value: 216 },
+      { label: '288 '+l.fibers, id: 11, value: 288 },
+      { label: '432 '+l.fibers, id: 12, value: 432 },
+      { label: '864 '+l.fibers, id: 13, value: 864 },
     ]);
   }, []);
 
@@ -136,14 +136,14 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
     let lArr = getSessionItem('LoggedInCables');
     lArr.push(pointInfoCable.id);
     setSessionItem('LoggedInCables', lArr);
-    logAddInfo(pointInfoCable.name_id, 'login', '-');
+    logAddInfo(pointInfoCable.name_id, l.login, '-');
   }
   function OnClickLogout() {
     setLoggedIn(false);
     let lArr = getSessionItem('LoggedInCables');
     const filteredArr = lArr.filter((itemId) => itemId !== pointInfoCable.id);
     setSessionItem('LoggedInCables', filteredArr);
-    logAddInfo(pointInfoCable.name_id, 'logout', '-');
+    logAddInfo(pointInfoCable.name_id, l.logout, '-');
   }
 
   async function OnClickComplete() {
@@ -154,14 +154,13 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
     const changedMarker = { ...cables[markerIndex], state: 2 };
     cloneMarkers.splice(markerIndex, 1, changedMarker);
     loadCables();
-    logAddInfo(form.name_id, 'completed', 'state changed to completed');
+    logAddInfo(form.name_id, l.completed, l.state_changed_to_completed);
   }
   function OnClickComments(pointInfo) {
     setPointInfo(pointInfo);
   }
-  function OnClickPictures(pointInfo) {
-    console.log('Pictures ', pointInfo);
-  }
+  // function OnClickPictures(pointInfo) {
+  // }
 
   const onChange = ({ name, value }) => {
     setIsChange(true);
@@ -171,23 +170,6 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
     }));
   };
 
-  function updatecables(item) {
-    const markerIndex = cables.findIndex((marker) => marker.id === item.id);
-    const clonecables = cables.slice();
-    const changedMarker = {
-      ...cables[markerIndex],
-      state: item.state,
-      name_id: item.name_id,
-      owner: item.owner,
-      capacity: item.capacity,
-      mfg: item.mfg,
-      model: item.model,
-      f_type: item.f_type,
-      p_type: item.p_type,
-      c_type: item.c_type,
-    };
-    clonecables.splice(markerIndex, 1, changedMarker);
-  }
 
   async function saveChanges() {
     const item = {
@@ -216,7 +198,7 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
     }
     setCables(cablesClone);
     setIsChange(false);
-    logAddInfo(form.name_id, 'Changes Saved', '');
+    logAddInfo(form.name_id, l.Changes_Saved, '');
     onClose();
   }
 
@@ -227,34 +209,33 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
   const userAccessLevel = getSessionItem('user').access_level;
 
   return (
-    <ModalWithTitle title={'Edit: ' + form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
+    <ModalWithTitle title={form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
       <Box component="form" display="flex" gap={1} alignItems="flex-start" flexDirection="column">
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
           {userAccessLevel >= 60 &&<CustomButton disabled={!isChange} onClick={saveChanges}>
-            Save changes
+            {l.Save_changes}
           </CustomButton>}
           {userAccessLevel >= 60 &&<CustomButton disabled={loggedIn} onClick={() => OnClickLogin()}>
-            Login
+            {l.Login}
           </CustomButton>}
           {userAccessLevel >= 60 &&<CustomButton disabled={!loggedIn} onClick={() => OnClickLogout()}>
-            Logout
+            {l.Logout}
           </CustomButton>}
-          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickComments(pointInfoCable)}>Comments</CustomButton>}
+          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickComments(pointInfoCable)}>{l.Comments}</CustomButton>}
           {userAccessLevel >= 60 &&<CustomButton disabled={isCompleted} onClick={() => OnClickComplete()}>
-            Mark as Complete
+            {l.Mark_as_Complete}
           </CustomButton>}
-          {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickPictures()}>Pictures</CustomButton>}
+          {/*{userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickPictures()}>{l.Pictures}</CustomButton>}*/}
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomInput label="ID" name="name_id" onChange={onChange} value={form.name_id} />
-          <CustomInput label="Manufacturer" name="mfg" onChange={onChange} value={form.mfg} />
-          <CustomInput label="Model" name="model" onChange={onChange} value={form.model} />
-          {/*<CustomInput label="Birthday" name="birthday" onChange={onChange} value={form.birthday.slice(0, 10)} />*/}
+          <CustomInput label={l.id} name="name_id" onChange={onChange} value={form.name_id} />
+          <CustomInput label={l.Manufacturer} name="mfg" onChange={onChange} value={form.mfg} />
+          <CustomInput label={l.Model} name="model" onChange={onChange} value={form.model} />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Stack spacing={3}>
               <DatePicker
                 views={['year', 'month']}
-                label="Mfg Year and Month"
+                label={l.Mfg_Year_Month}
                 minDate={dayjs('2000-03-01')}
                 maxDate={dayjs('2030-06-01')}
                 value={bDay}
@@ -273,39 +254,39 @@ const Cable_edit = ({ setPointInfo, onClose, pointInfoCable, cables, loadCables,
           </LocalizationProvider>
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomInput sx={{ width: '220px' }} select label="Fiber type" name="f_type" onChange={onChange} value={form.f_type}>
+          <CustomInput sx={{ width: '220px' }} select label={l.Fiber_type} name="f_type" onChange={onChange} value={form.f_type}>
             {fTypeOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
             ))}
           </CustomInput>
-          <CustomInput sx={{ width: '220px' }} select label="Packing type" name="p_type" onChange={onChange} value={form.p_type}>
+          <CustomInput sx={{ width: '220px' }} select label={l.Packing_type} name="p_type" onChange={onChange} value={form.p_type}>
             {pTypeOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
             ))}
           </CustomInput>
-          <CustomInput sx={{ width: '220px' }} select label="Cable type" name="c_type" onChange={onChange} value={form.c_type}>
+          <CustomInput sx={{ width: '220px' }} select label={l.Cable_type} name="c_type" onChange={onChange} value={form.c_type}>
             {cTypeOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
             ))}
           </CustomInput>
-          <CustomInput disabled label="Last update" name="last_update" onChange={onChange} value={form.last_update.slice(0, 10)} />
+          <CustomInput disabled label={l.Last_update} name="last_update" onChange={onChange} value={form.last_update.slice(0, 10)} />
         </Box>
         <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomInput sx={{ width: '220px' }} select label="Size" name="capacity" onChange={onChange} value={form.capacity}>
+          <CustomInput sx={{ width: '220px' }} select label={l.Size} name="capacity" onChange={onChange} value={form.capacity}>
             {capacityOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
             ))}
           </CustomInput>
-          <CustomInput label="Owner" name="owner" onChange={onChange} value={form.owner} />
-          <CustomInput sx={{ width: '220px' }} select label="State" name="state" onChange={onChange} value={form.state}>
+          <CustomInput label={l.Owner} name="owner" onChange={onChange} value={form.owner} />
+          <CustomInput sx={{ width: '220px' }} select label={l.State} name="state" onChange={onChange} value={form.state}>
             {stateOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}

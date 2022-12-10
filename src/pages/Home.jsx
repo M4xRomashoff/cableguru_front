@@ -12,7 +12,10 @@ import { setSessionItem } from '../helpers/storage';
 import NewProject from '../components/Modals/NewProjectModal';
 import DelProject from '../components/Modals/DelProjectModal';
 
-const Home = ({ setMenuLabel }) => {
+
+
+
+const Home = ({ l, setMenuLabel }) => {
   const [userDb, setUsersDb] = useState([]);
   const [userProject, setUserProject] = useState({});
   const [projectModal, setProjectModal] = useState(false);
@@ -58,7 +61,7 @@ const Home = ({ setMenuLabel }) => {
 
   const changeUserProject = ({ value }) => {
     setUserProject(value);
-    setMenuLabel('Project : ' + value.dbName);
+    setMenuLabel(l.Project +' : ' + value.dbName);
     setSessionItem('project', value);
   };
 
@@ -72,13 +75,13 @@ const Home = ({ setMenuLabel }) => {
       {projectModal && <NewProject onClose={onCloseNewProject} />}
       {delProjectModal && <DelProject onClose={onCloseDelProject} />}
       <Box gap={2} display="flex" flexDirection="column" alignItems="flex-start" width="fit-content">
-        <Selector sx={{ width: '250px' }} onChange={changeUserProject} value={userProject} label="Select Project" fields={{ label: 'dbName', value: 'id' }} options={userDb} />
+        <Selector sx={{ width: '250px' }} onChange={changeUserProject} value={userProject} label={l.Select_Project} fields={{ label: 'dbName', value: 'id' }} options={userDb} />
         <Box gap={2} display="flex" flexDirection="row" alignItems="flex-start" width="fit-content">
-          <CustomButton onClick={goToProject}>Go to Project</CustomButton>
-          {userAccessLevel >= 79 && <CustomButton onClick={newProject}>New Project</CustomButton>}
-          {userAccessLevel >= 79 && <CustomButton onClick={delProject}>Delete Project</CustomButton>}
+          <CustomButton onClick={goToProject}>{l.Go_to_Project}</CustomButton>
+          {userAccessLevel >= 79 && <CustomButton onClick={newProject}>{l.New_Project}</CustomButton>}
+          {userAccessLevel >= 79 && <CustomButton onClick={delProject}>{l.Delete_Project}</CustomButton>}
         </Box>
-        {userAccessLevel >= 77 &&<AdminControls />}
+        {userAccessLevel >= 77 &&<AdminControls l={l}/>}
       </Box>
     </Box>
   );
