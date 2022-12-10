@@ -10,10 +10,11 @@ import CustomButton from '../components/Button';
 import { useUserStore } from '../store';
 import useDeleteModal from '../hooks/useDeleteModal';
 import { addAccessRequest, removeAccessRequest } from '../api/accessApi';
-import { getDbList } from '../api/dataBasesApi';
 import ControlBox from './ControlBox';
+import Swal from 'sweetalert2';
 
-function AdminControlsContainer() {
+
+function AdminControlsContainer({l}) {
   const [isOpen, setIsOpen] = useState(false);
   const [dbOptions, setDbOptions] = useState([]);
   const [usersList, setUsersList] = useState([]);
@@ -109,17 +110,27 @@ function AdminControlsContainer() {
     setDbNamesToAdd([]);
   };
 
+  async function delUser(){
+    const result1 = await deleteUserRequest(selectedUser.id);
+    const result2 = await getUsers();
+    setSelectedUser({});
+  }
+
   const onDeleteUser = () => {
-    deleteUser({
-      itemId: selectedUser.id,
-      deleteItem: deleteUserRequest,
-      message: 'Success',
-      objectName: `${selectedUser.user_name}`,
-      setter: async () => {
-        await getUsers();
-        setSelectedUser({});
-      },
-    });
+
+    Swal.fire({
+      title: l.Are_you_sure,
+      text: l.You_want_to_delete + selectedUser.user_name ,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        delUser();
+      }
+    })
   };
 
   const changeAccessProps = () => ({
@@ -136,7 +147,19 @@ function AdminControlsContainer() {
   const onAddAccess = () => addAccess(changeAccessProps());
 
   const onRemoveAccess = () => {
-    removeAccess(changeAccessPropsR());
+    Swal.fire({
+      title: l.Are_you_sure,
+      text: l.You_want_to_remove_access_for + selectedUser.user_name ,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeAccess(changeAccessPropsR());
+      }
+    })
   };
 
   const changeDbNamesToAdd = ({ value }) => setDbNamesToAdd(value);
@@ -149,14 +172,15 @@ function AdminControlsContainer() {
 
   return (
     <>
+      {/*{alertIsOpen && <AlertDialog onClose={() => setAlertIsOpen(false)} title={alertTitle} message={alertMessage} isOpen={alertIsOpen}/>}*/}
       <CustomButton className="button" onClick={() => setIsOpen(true)}>
-        Add User
+        {l.Add_User}
       </CustomButton>
       {isOpen && <AddUser onClose={() => setIsOpen(false)} getUsers={getUsers} />}
       <ControlBox>
-        <Selector sx={{ width: '250px' }} onChange={changeSelectedUser} value={selectedUser} label="Select User" fields={{ label: 'user_name', value: 'id' }} options={usersList} />
+        <Selector sx={{ width: '250px' }} onChange={changeSelectedUser} value={selectedUser} label={l.Select_User} fields={{ label: 'user_name', value: 'id' }} options={usersList} />
         <CustomButton color="error" disabled={noSelectedUser} onClick={onDeleteUser} sx={{ width: '120px', marginTop: '4px' }}>
-          Delete User
+          {l.Delete_User}
         </CustomButton>
       </ControlBox>
       <ControlBox>
@@ -171,11 +195,11 @@ function AdminControlsContainer() {
             id: 'dbName',
             value: 'dbName',
           }}
-          label="Select Projects to Add"
+          label={l.Select_Projects_to_Add}
           options={dbOptionsToAdd}
         />
         <CustomButton disabled={!dbOptionsToAdd.length} isLoading={changeAccessLoading} onClick={onAddAccess} sx={{ width: '120px', marginTop: '4px' }}>
-          Add Access
+          {l.Add_Access}
         </CustomButton>
       </ControlBox>
       <ControlBox>
@@ -190,21 +214,21 @@ function AdminControlsContainer() {
             id: 'dbName',
             value: 'dbName',
           }}
-          label="Select Projects to Remove"
+          label={l.Select_Projects_to_Remove}
           options={dbOptionsToRemove}
         />
         <CustomButton disabled={!dbOptionsToRemove.length} sx={{ width: '160px', marginTop: '4px', ml: 1 }} color="warning" isLoading={changeAccessLoading} onClick={onRemoveAccess}>
-          Remove Access
+          {l.Remove_Access}
         </CustomButton>
       </ControlBox>
     </>
   );
 }
 
-export default function AdminControls() {
+export default function AdminControls({l}) {
   const { userStore } = useUserStore();
 
   if (userStore?.access_level !== 80) return null;
 
-  return <AdminControlsContainer />;
+  return <AdminControlsContainer l={l}/>;
 }

@@ -7,7 +7,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { latLng } from 'leaflet';
 
-const SearchModal = ({ onClose, markersSp, markersTp, map }) => {
+const SearchModal = ({ l, onClose, markersSp, markersTp, map }) => {
   const [item, setItem] = useState();
   const [items, setItems] = useState([]);
 
@@ -38,10 +38,10 @@ const SearchModal = ({ onClose, markersSp, markersTp, map }) => {
   };
 
   return (
-    <ModalWithTitle title="Search" containerSx={{ width: 350, height: 400 }} close={onClose} open>
+    <ModalWithTitle title={l.Search} containerSx={{ width: 350, height: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column" onSubmit={handleSubmit}>
-        <Autocomplete disablePortal id="search" filterSelectedOptions options={items} sx={{ width: 300 }} onChange={onTagsChange} renderInput={(params) => <TextField {...params} label="Item" />} />
-        <CustomButton type="submit">Search Item</CustomButton>
+        <Autocomplete disablePortal id="search" filterSelectedOptions options={items} sx={{ width: 300 }} onChange={onTagsChange} renderInput={(params) => <TextField {...params} label={l.Select_Item} />} />
+        <CustomButton type="submit">{l.Search_Item}</CustomButton>
       </Box>
     </ModalWithTitle>
   );

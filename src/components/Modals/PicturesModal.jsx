@@ -66,7 +66,7 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
           id='file'
           name='file'
           files={[file]}
-          extensions={['png', 'svg', 'jpeg']}
+          extensions={['png', 'svg', 'jpeg', 'jpg']}
           endIcon={<PublishSharp />}
           label='New image'
         />

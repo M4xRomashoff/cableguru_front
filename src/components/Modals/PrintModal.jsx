@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import '../Home/Home.css';
 import { Box } from '@mui/material';
 import ModalWithTitle from './ModalWithTitle';
-import CustomButton from '../Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { PDFViewer } from '@react-pdf/renderer';
 import MyDocument from './MyDocument';
 import useApi from '../../hooks/useApi';
@@ -34,7 +32,7 @@ function getSp(id, markersSp) {
   return sp;
 }
 
-const PrintModal = ({ onClose, markersSp, markersTp }) => {
+const PrintModal = ({ l, onClose, markersSp, markersTp }) => {
   const [stuffToPrint, setStuffToPrint] = useState();
   const [itemSp, setItemSp] = useState({});
   const [itemTp, setItemTp] = useState({});
@@ -109,15 +107,15 @@ const PrintModal = ({ onClose, markersSp, markersTp }) => {
   }
 
   return (
-    <ModalWithTitle title="Print" containerSx={{ width: 900, height: 800 }} close={onClose} open>
+    <ModalWithTitle title={l.Print} containerSx={{ width: 900, height: 800 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column">
         <Box display="flex" gap={2} alignItems="flex-start" flexDirection="row">
-          <Autocomplete disablePortal id="search" filterSelectedOptions options={items} sx={{ width: 300 }} onChange={onTagsChange} renderInput={(params) => <TextField {...params} label="Item" />} />
+          <Autocomplete disablePortal id="search" filterSelectedOptions options={items} sx={{ width: 300 }} onChange={onTagsChange} renderInput={(params) => <TextField {...params} label={l.Select_Item} />} />
         </Box>
         <BackdropLoading isLoading={isSpLoading || isTpLoading} />
         {stuffToPrint && Boolean(spliceData.header) && (
           <PDFViewer width={850} height={620}>
-            <MyDocument item={stuffToPrint} spliceData={spliceData} />
+            <MyDocument l={l} item={stuffToPrint} spliceData={spliceData} />
           </PDFViewer>
         )}
       </Box>

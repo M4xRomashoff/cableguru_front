@@ -166,7 +166,7 @@ function getSp(id, markersSp) {
   return sp;
 }
 
-function prepData(trace, markersSp, markersTp) {
+function prepData(l, trace, markersSp, markersTp) {
   let koef = 1.25;
   let maxDist = getTotalDistance(trace);
   let minDist = 0;
@@ -175,46 +175,46 @@ function prepData(trace, markersSp, markersTp) {
   const endPoint = [];
   let subItem = [];
   const startTp = getTp(trace[0].itemId, markersTp);
-  subItem = ['Start Point (A)', 'ID', startTp.name_id];
+  subItem = [l.Start_Point, l.id , startTp.name_id];
   startPoint.push(subItem);
-  subItem = ['', 'Address', startTp.address];
+  subItem = ['', l.Address, startTp.address];
   startPoint.push(subItem);
-  subItem = ['', 'Capacity', startTp.capacity];
+  subItem = ['', l.Capacity, startTp.capacity];
   startPoint.push(subItem);
-  subItem = ['', 'Connector', startTp.connector];
+  subItem = ['', l.Connector, startTp.connector];
   startPoint.push(subItem);
-  subItem = ['', 'Port', trace[0].port];
+  subItem = ['', l.Port, trace[0].port];
   startPoint.push(subItem);
 
   if (trace[trace.length - 1].itemType === 'tp') {
     const endTp = getTp(trace[trace.length - 1].itemId, markersTp);
-    subItem = ['End Point (Z)', 'ID', endTp.name_id];
+    subItem = [l.End_Point_Z, l.id, endTp.name_id];
     endPoint.push(subItem);
-    subItem = ['', 'Address', endTp.address];
+    subItem = ['', l.Address, endTp.address];
     endPoint.push(subItem);
-    subItem = ['', 'Capacity', endTp.capacity];
+    subItem = ['', l.Capacity, endTp.capacity];
     endPoint.push(subItem);
-    subItem = ['', 'Connector', endTp.connector];
+    subItem = ['', l.Connector, endTp.connector];
     endPoint.push(subItem);
-    subItem = ['', 'Port', trace[trace.length - 1].port];
+    subItem = ['', l.Port, trace[trace.length - 1].port];
 
     endPoint.push(subItem);
   }
   if (trace[trace.length - 1].itemType === 'sp') {
     const endSp = getSp(trace[trace.length - 1].itemId, markersSp);
-    subItem = ['End Point (Z)', 'ID', endSp.name_id];
+    subItem = [l.End_Point_Z, l.id, endSp.name_id];
     endPoint.push(subItem);
-    subItem = ['', 'Address', endSp.address];
+    subItem = ['', l.Address, endSp.address];
     endPoint.push(subItem);
-    subItem = ['', 'Connector', 'open end'];
+    subItem = ['', l.Connector, l.open_end];
     endPoint.push(subItem);
-    subItem = ['', 'Fiber', trace[trace.length - 1].fiber];
+    subItem = ['', l.Fiber, trace[trace.length - 1].fiber];
     endPoint.push(subItem);
   }
   if (trace[trace.length - 1].itemType === 'none') {
-    subItem = ['End Point (Z)', 'ID', 'none'];
+    subItem = [l.End_Point_Z, l.id, l.none];
     endPoint.push(subItem);
-    subItem = ['', 'Tail', 'open end'];
+    subItem = ['', l.Tail, l.open_end];
     endPoint.push(subItem);
   }
 
@@ -245,12 +245,13 @@ function prepData(trace, markersSp, markersTp) {
   return [startPoint, dataBody, endPoint];
 }
 
-const RouteDetails = ({ cables, markersSp, markersTp, trace, setTrace, onClose }) => {
-  const [startPoint, dataBody, endPoint] = prepData(trace, markersSp, markersTp);
-  const dataHead = [['', 'SP(TP) id', 'fiber', 'distance (A-point)', 'distance (point-Z)', 'OTDR (A-point)', 'OTDR (point-Z)']];
+const RouteDetails = ({ l, cables, markersSp, markersTp, trace, onClose }) => {
 
+  const [startPoint, dataBody, endPoint] = prepData(l, trace, markersSp, markersTp);
+  // const dataHead = [['', 'SP(TP) id', 'fiber', 'distance (A-point)', 'distance (point-Z)', 'OTDR (A-point)', 'OTDR (point-Z)']];
+  const dataHead = [['', l.SP_TP_id, l.Fiber, l.distance_A_point, l.distance_point_Z, l.OTDR_A_point, l.OTDR_point_Z]];
   return (
-    <ModalWithTitle title="Route Details" containerSx={{ width: 800 }} close={onClose} open>
+    <ModalWithTitle title={l.Fiber_Route_Details} containerSx={{ width: 800 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column">
         <TableContainer component={Paper}>
           <Table sx={{ maxWidth: 500 }} aria-label="customized table">
@@ -307,6 +308,7 @@ const RouteDetails = ({ cables, markersSp, markersTp, trace, setTrace, onClose }
       </Box>
     </ModalWithTitle>
   );
+
 };
 
 export default RouteDetails;

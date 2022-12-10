@@ -48,7 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const HistoryModal = ({ onClose, markersSp, markersTp }) => {
+const HistoryModal = ({ l, onClose, markersSp, markersTp }) => {
   const [loadedItems, setLoadedItems] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const [logItems, setLogItems] = useState([]);
@@ -142,7 +142,7 @@ const HistoryModal = ({ onClose, markersSp, markersTp }) => {
   });
 
   return (
-    <ModalWithTitle title="History" containerSx={{ width: 900, height: 800 }} close={onClose} open>
+    <ModalWithTitle title={l.History} containerSx={{ width: 900, height: 800 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column">
         <Box display="flex" gap={2} alignItems="flex-start" flexDirection="row">
           <Autocomplete
@@ -152,7 +152,7 @@ const HistoryModal = ({ onClose, markersSp, markersTp }) => {
             options={items}
             sx={{ width: 300 }}
             onChange={onTagsChangeItems}
-            renderInput={(params) => <TextField {...params} label="Filter by item id" />}
+            renderInput={(params) => <TextField {...params} label={l.Filter_by_item_id} />}
           />
           <Autocomplete
             disablePortal
@@ -161,7 +161,7 @@ const HistoryModal = ({ onClose, markersSp, markersTp }) => {
             options={actions}
             sx={{ width: 300 }}
             onChange={onTagsChangeActions}
-            renderInput={(params) => <TextField {...params} label="Filter by action" />}
+            renderInput={(params) => <TextField {...params} label={l.Filter_by_action} />}
           />
         </Box>
         <TableContainer component={Paper}>

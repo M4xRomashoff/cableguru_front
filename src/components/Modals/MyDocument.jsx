@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import '../Home/Home.css';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+
+Font.register({
+  family: "Roboto",
+  src:
+    "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf"
+});
+
 const styles = StyleSheet.create({
+  myText : {
+    fontFamily : "Roboto"
+  },
+
+
   page: {
     flexDirection: 'column',
     backgroundColor: '#E4E4E4',
@@ -77,7 +89,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function MyDocument({ item, spliceData }) {
+function MyDocument({ l, item, spliceData }) {
   let MainHeader0 = [];
   let MainHeader1 = [];
   let MainHeader2 = [];
@@ -104,8 +116,8 @@ function MyDocument({ item, spliceData }) {
   }
 
   if (item.connector) {
-    MainHeader0 = ['ID : ', item.id, '\n'];
-    MainHeader1 = ['Manufacturer : ', '\n Model : ', '\nSize :', '\n Connector : ', '\n Owner : ', '\n Address : ', '\n Access :', '\n Latitude :', '\n Longitude :', '\n Build Date : '];
+    MainHeader0 = [l.id+' : ', item.id, '\n'];
+    MainHeader1 = [l.Manufacturer +' : ', '\n '+ l.Model +' : ', '\n '+l.Size+' :', '\n '+l.Connector+' : ', '\n '+l.Owner+' : ', '\n '+l.Address+' : ', '\n '+l.Access+' :', '\n '+l.Latitude +' :', '\n'+l. Longitude+' :', '\n '+l.Build_Date+' : '];
     MainHeader2 = [
       item.mfg,
       '\n',
@@ -130,8 +142,8 @@ function MyDocument({ item, spliceData }) {
   }
 
   if (item.spl_type) {
-    MainHeader0 = ['ID : ', item.id, '\n'];
-    MainHeader1 = ['Manufacturer : ', '\n Model : ', '\nSize :', '\n Splice Type : ', '\n Owner : ', '\n Address : ', '\n Mount :', '\n Latitude :', '\n Longitude :', '\n Build Date : '];
+    MainHeader0 = [l.id+' : ', item.id, '\n'];
+    MainHeader1 = [l.Manufacturer +' : ', '\n '+ l.Model +' : ', '\n '+l.Size+' :', '\n '+l.Splice_Type+' : ', '\n '+l.Owner+' : ', '\n '+l.Address+' : ', '\n '+l.Mount+' :', '\n '+l.Latitude +' :', '\n'+l. Longitude+' :', '\n '+l.Build_Date+' : '];
     MainHeader2 = [
       item.mfg,
       '\n',

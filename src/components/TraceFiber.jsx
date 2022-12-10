@@ -9,7 +9,7 @@ import CustomButton from './Button';
 import MenuItem from '@mui/material/MenuItem';
 import { getTrace } from '../api/dataBasesApi';
 
-const TraceFiber = ({ onClose, markersTp, trace, setTrace }) => {
+const TraceFiber = ({ l, onClose, markersTp, trace, setTrace }) => {
   const [tpValue, setTpValue] = useState('');
   const [portValue, setPortValue] = useState('');
   const [tpOptions, setTpOptions] = useState([]);
@@ -52,23 +52,23 @@ const TraceFiber = ({ onClose, markersTp, trace, setTrace }) => {
   };
 
   return (
-    <ModalWithTitle title="Trace Fiber" containerSx={{ width: 400 }} close={onClose} open>
+    <ModalWithTitle title={l.Fiber_Route} containerSx={{ width: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column" onSubmit={handleSubmit}>
-        <CustomInput sx={{ width: '220px' }} select label="Termination Point" name="tp" onChange={onChangeTp} value={tpValue}>
+        <CustomInput sx={{ width: '220px' }} select label={l.Termination_Point} name="tp" onChange={onChangeTp} value={tpValue}>
           {tpOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
           ))}
         </CustomInput>
-        <CustomInput sx={{ width: '220px' }} select label="Select Port" name="port" onChange={onChangePort} value={portValue}>
+        <CustomInput sx={{ width: '220px' }} select label={l.Select_Port} name="port" onChange={onChangePort} value={portValue}>
           {portOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
           ))}
         </CustomInput>
-        <CustomButton type="submit">View Trace</CustomButton>
+        <CustomButton type="submit">{l.View_Trace}</CustomButton>
       </Box>
     </ModalWithTitle>
   );

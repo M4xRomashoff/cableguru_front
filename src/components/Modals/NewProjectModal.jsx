@@ -5,7 +5,7 @@ import useApi from '../../hooks/useApi';
 import ModalWithTitle from './ModalWithTitle';
 import CustomInput from '../Inputs';
 import CustomButton from '../Button';
-import { createNewProject } from '../../api/dataBasesApi';
+import { createNewProject, getDbList } from '../../api/dataBasesApi';
 import { useNavigate } from 'react-router-dom';
 import { getSessionItem, setSessionItem } from '../../helpers/storage';
 import { addAccessRequest } from '../../api/accessApi';
@@ -38,19 +38,30 @@ const NewProject = ({ onClose }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let flag = true;
+    let existDbs = existDbs = await getDbList();
 
-    // check name
+    if (Array.isArray(existDbs)) console.log('array');
+    if (Array.isArray(existDbs)){
+    for (let i=0;i<existDbs.length;i++){
+      if (existDbs[i].dbName === newName) {flag = false}
+    }}
 
-    const response = await createNewProject(newName);
+    if (!flag) {alert('please pick different name for new project.  '+newName+' already exists');
+    }
+    else {
 
-    const onAddAccess = await addAccess(changeAccessProps());
+      await createNewProject(newName);
 
-    const newUsersDb = await getUserDbRequest(userId);
+      await addAccess(changeAccessProps());
 
-    setSessionItem('project', findProject(newName, newUsersDb));
+      const newUsersDb = await getUserDbRequest(userId);
 
-    navigate(`/map`);
-    onClose();
+      setSessionItem('project', findProject(newName, newUsersDb));
+
+      navigate(`/map`);
+      onClose();
+    }
   };
 
   const { makeRequest: createComment, isLoading } = useApi({

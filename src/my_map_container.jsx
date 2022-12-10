@@ -8,10 +8,11 @@ import SettingsModal from './components/Modals/SettingsModal';
 import SearchModal from './components/Modals/SearchModal';
 import PrintModal from './components/Modals/PrintModal';
 import HistoryModal from './components/Modals/HistoryModal';
+import DocumentsModal from './components/Modals/DocumentsModal';
 
 let centerDefault = [51.515, -0.09];
 
-function MyMapContainer({ lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
+function MyMapContainer({ l, documents, setDocuments, lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
   const [center, setCenter] = useState([]);
   const [readySp, setReadySp] = useState(false);
   const [readyTp, setReadyTp] = useState(false);
@@ -160,17 +161,22 @@ function MyMapContainer({ lb, setLb, setSetting, settings, search, setSearch, pr
   const onCloseHistoryModal = () => {
     setHistory(false);
   };
+  const onCloseDocumentsModal = () => {
+    setDocuments(false);
+  };
   return (
     <div>
-      {lb && <LossAndBudgetModal lb={lb} setLb={setLb} onClose={onCloseLossAndBudgetModal} markersTp={markersTP} markersSp={markersSP} />}
-      {settings && <SettingsModal onClose={onCloseSettingsModal} />}
-      {search && <SearchModal onClose={onCloseSearchModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
-      {print && <PrintModal onClose={onClosePrintModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
-      {history && <HistoryModal onClose={onCloseHistoryModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
+      {lb && <LossAndBudgetModal l={l} lb={lb} setLb={setLb} onClose={onCloseLossAndBudgetModal} markersTp={markersTP} markersSp={markersSP} />}
+      {settings && <SettingsModal l={l} onClose={onCloseSettingsModal} />}
+      {search && <SearchModal l={l} onClose={onCloseSearchModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
+      {print && <PrintModal l={l} onClose={onClosePrintModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
+      {history && <HistoryModal l={l} onClose={onCloseHistoryModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
+      {documents && <DocumentsModal l={l} onClose={onCloseDocumentsModal}  />}
 
       <MyData />
       {readyCab && readyCon && readyTp && readySp && (
         <MyMap
+          l={l}
           traceIsOpen={traceIsOpen}
           routeDetailsIsOpen={routeDetailsIsOpen}
           setRouteDetailsIsOpen={setRouteDetailsIsOpen}
