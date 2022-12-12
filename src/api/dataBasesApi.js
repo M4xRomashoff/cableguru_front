@@ -44,9 +44,9 @@ export async function getDataTpRequest() {
 export async function getSpData(spId) {
   if (spId) {
     let project = getSessionItem('project');
-    const dbAndId = project?.dbName + ',' + spId.toString();
+    let lang = getSessionItem('lang');
 
-    return await API.get(`/db-sp-fcs/${project?.dbName},${spId}`).then(({ data }) => data);
+    return await API.get(`/db-sp-fcs/${project?.dbName},${spId},${lang}`).then(({ data }) => data);
   } else return [];
 }
 
@@ -112,9 +112,9 @@ export async function getFewTp(itemsList) {
 
 export async function getTpData(tpId) {
   let project = getSessionItem('project');
-  const dbAndId = project?.dbName + ',' + tpId.toString();
+  let lang = getSessionItem('lang');
 
-  return await API.get(`/db-tp-fcs/${project?.dbName},${tpId}`).then(({ data }) => data);
+  return await API.get(`/db-tp-fcs/${project?.dbName},${tpId},${lang}`).then(({ data }) => data);
 }
 
 export async function getTpPortData(tpId) {

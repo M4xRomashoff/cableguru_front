@@ -15,7 +15,7 @@ function getCableListRaw(connections, id) {
   });
   return cableList;
 }
-function getCableList(cables, cableListRaw, header) {
+function getCableList(l, cables, cableListRaw, header) {
   const cableList = [];
   let indexId = 0;
   cableListRaw.map((itemRaw, index) => {
@@ -25,7 +25,7 @@ function getCableList(cables, cableListRaw, header) {
           let newItemL = {
             id: itemCable.id,
             size: itemCable.capacity,
-            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') ring low side  ',
+            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') '+l.ring_low_side,
             type: 'low',
             indexId: (indexId += 1),
           };
@@ -33,7 +33,7 @@ function getCableList(cables, cableListRaw, header) {
           let newItemH = {
             id: itemCable.id,
             size: itemCable.capacity,
-            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') ring high side  ',
+            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') '+l.ring_high_side,
             type: 'high',
             indexId: (indexId += 1),
           };
@@ -42,7 +42,7 @@ function getCableList(cables, cableListRaw, header) {
           let newItem = {
             id: itemCable.id,
             size: itemCable.capacity,
-            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') tail  ',
+            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') '+l.tail,
             type: 'tail',
             indexId: (indexId += 1),
           };
@@ -60,15 +60,15 @@ function getCableList(cables, cableListRaw, header) {
   return cableList;
 }
 
-const ChangeSeqNumbersSp = ({ dataFcs, changeSeqPoint, cables, getTpDataRequest, onClose, connections }) => {
+const ChangeSeqNumbersTp = ({l, dataFcs, changeSeqPoint, cables, getTpDataRequest, onClose, connections }) => {
   const [seq, setSeq] = useState({});
   const [cablesList, setCablesList] = useState([]);
 
-  const title = 'Change Sequential Numbers';
+  const title = l.Change_Sequential_Numbers;
 
   useEffect(() => {
     const cableListRaw = getCableListRaw(connections, changeSeqPoint.id);
-    const cableList = getCableList(cables, cableListRaw, dataFcs.header);
+    const cableList = getCableList(l, cables, cableListRaw, dataFcs.header);
     setCablesList(cableList);
   }, []);
 
@@ -83,7 +83,7 @@ const ChangeSeqNumbersSp = ({ dataFcs, changeSeqPoint, cables, getTpDataRequest,
   };
 
   async function onSaveChanges() {
-    const response = await logAddInfo(changeSeqPoint.name_id, 'Sequential Numbers Updated', '');
+    const response = await logAddInfo(changeSeqPoint.name_id, l.Sequential_Numbers_Updated, '');
     const response2 = await updateSeqNumbers('tp', changeSeqPoint.id, cablesList);
     getTpDataRequest();
     onClose();
@@ -106,10 +106,10 @@ const ChangeSeqNumbersSp = ({ dataFcs, changeSeqPoint, cables, getTpDataRequest,
               </Box>
             ))}
         </Box>
-        <CustomButton onClick={() => onSaveChanges()}> Save changes </CustomButton>
+        <CustomButton onClick={() => onSaveChanges()}> {l.Save_changes} </CustomButton>
       </Box>
     </ModalWithTitle>
   );
 };
 
-export default ChangeSeqNumbersSp;
+export default ChangeSeqNumbersTp;

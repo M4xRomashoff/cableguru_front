@@ -118,19 +118,9 @@ function AdminControlsContainer({l}) {
 
   const onDeleteUser = () => {
 
-    Swal.fire({
-      title: l.Are_you_sure,
-      text: l.You_want_to_delete + selectedUser.user_name ,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        delUser();
-      }
-    })
+    const sure = window.confirm(l.Are_you_sure + l.You_want_to_delete + selectedUser.user_name+' ? ')
+    if (!sure) return
+    delUser();
   };
 
   const changeAccessProps = () => ({
@@ -147,19 +137,9 @@ function AdminControlsContainer({l}) {
   const onAddAccess = () => addAccess(changeAccessProps());
 
   const onRemoveAccess = () => {
-    Swal.fire({
-      title: l.Are_you_sure,
-      text: l.You_want_to_remove_access_for + selectedUser.user_name ,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        removeAccess(changeAccessPropsR());
-      }
-    })
+    const sure = window.confirm(l.Are_you_sure + l.You_want_to_remove_access_for + selectedUser.user_name +' ? ')
+    if (!sure) return
+    removeAccess(changeAccessPropsR());
   };
 
   const changeDbNamesToAdd = ({ value }) => setDbNamesToAdd(value);

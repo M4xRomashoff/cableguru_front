@@ -25,7 +25,7 @@ function LogoutClick() {
   refreshPage();
 }
 
-export default function Header({ l, setL, setLb, setSetting, setSearch, setPrint, setHistory, setRouteDetailsIsOpen, setTraceIsOpen, menuLabel, setMenuLabel, setDocuments }) {
+export default function Header({ setLocateMe, l, setL, setLb, setSetting, setSearch, setPrint, setHistory, setRouteDetailsIsOpen, setTraceIsOpen, menuLabel, setMenuLabel, setDocuments }) {
   const { userStore } = useUserStore();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElLang, setAnchorElLang] = React.useState(null);
@@ -63,6 +63,7 @@ export default function Header({ l, setL, setLb, setSetting, setSearch, setPrint
   return (
     <Box sx={{ flexGrow: 1 }}>
       <TemporaryDrawer
+        setLocateMe={setLocateMe}
         l={l}
         setDocuments={setDocuments}
         setMenuLabel={setMenuLabel}

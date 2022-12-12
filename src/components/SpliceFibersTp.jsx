@@ -26,7 +26,7 @@ function getCableListRaw(connections, id) {
   });
   return cableList;
 }
-function getCableList(cables, cableListRaw, header) {
+function getCableList(l, cables, cableListRaw, header) {
   const cableList = [];
   let indexId = 0;
   cableListRaw.map((itemRaw) => {
@@ -36,14 +36,14 @@ function getCableList(cables, cableListRaw, header) {
           let newItemL = {
             id: itemCable.id,
             size: itemCable.capacity,
-            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') ring low side  ',
+            name_id: itemCable.name_id + ' (' + itemCable.capacity.toString() + ') '+ l.ring_low_side,
             type: 'low',
           };
           cableList.push(newItemL);
           let newItemH = {
             id: itemCable.id,
             size: itemCable.capacity,
-            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') ring high side  ',
+            name_id: itemCable.name_id + ' (' + itemCable.capacity.toString() + ') '+l.ring_high_side,
             type: 'high',
           };
           cableList.push(newItemH);
@@ -51,7 +51,7 @@ function getCableList(cables, cableListRaw, header) {
           let newItem = {
             id: itemCable.id,
             size: itemCable.capacity,
-            name_id: itemCable.name_id + ' ct:(' + itemCable.capacity.toString() + ') tail  ',
+            name_id: itemCable.name_id + ' (' + itemCable.capacity.toString() + ') '+l.tail,
             type: 'tail',
           };
           cableList.push(newItem);
@@ -66,7 +66,7 @@ function getCableList(cables, cableListRaw, header) {
 
   return cableList;
 }
-const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, getTpDataRequest, onClose, connections }) => {
+const SpliceFibersTp = ({ l, dataFcs, updateState, spliceFibersPointTp, cables, getTpDataRequest, onClose, connections }) => {
   const [cable1, setCable1] = useState({});
   const [cable2, setCable2] = useState({});
   const [cable1_Options, setCable1_Options] = useState([]);
@@ -79,19 +79,19 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
   const [numberOfFibers2, setNumberOfFibers2] = useState(1);
   const [cableSelected1, setCableSelected1] = useState(false);
   const [cableSelected2, setCableSelected2] = useState(false);
-  const [label1, setLabel1] = useState('please select cable above');
-  const [label2, setLabel2] = useState('please select cable above');
-  const title = 'Splice Fibers';
+  const [label1, setLabel1] = useState(l.please_select_cable_above);
+  const [label2, setLabel2] = useState(l.please_select_cable_above);
+  const title = l.Splice_Fibers;
 
   useEffect(() => {
     let CableListItemPanel = {
       id: 0,
       size: spliceFibersPointTp.capacity,
-      name_id: spliceFibersPointTp.name_id + ' ct:(' + spliceFibersPointTp.capacity.toString() + ') tail',
+      name_id: spliceFibersPointTp.name_id + ' ct:(' + spliceFibersPointTp.capacity.toString() + ') '+l.tail,
       type: 'ports',
     };
     const cableListRaw = getCableListRaw(connections, spliceFibersPointTp.id);
-    const cableList = getCableList(cables, cableListRaw, dataFcs.header);
+    const cableList = getCableList(l, cables, cableListRaw, dataFcs.header);
     cableList.unshift(CableListItemPanel);
 
     setCable1_Options(cableList);
@@ -107,24 +107,24 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
   const changeCable1 = ({ value }) => {
     setCable1(value);
     setCableSelected1(true);
-    setLabel1('Cable size ' + value.size.toString() + ' Fibers( ' + parseInt(startFiber1) + '-' + parseInt(endFiber1) + ')');
+    setLabel1(l.Cable_size  + value.size.toString() +  l.fibers+'( ' + parseInt(startFiber1) + '-' + parseInt(endFiber1) + ')');
   };
   const changeCable2 = ({ value }) => {
     setCable2(value);
     setCableSelected2(true);
-    setLabel2('Cable size ' + value.size.toString() + ' Fibers( ' + parseInt(startFiber2) + '-' + parseInt(endFiber2) + ')');
+    setLabel2(l.Cable_size + value.size.toString() + l.fibers+'( ' + parseInt(startFiber2) + '-' + parseInt(endFiber2) + ')');
   };
   const onChangeStartFiber1 = ({ value }) => {
     let newEnd1 = parseInt(value) + parseInt(numberOfFibers1) - 1;
     setStartFiber1(value);
     setEndFiber1(newEnd1);
-    setLabel1('Cable size ' + cable1.size + ' Fibers( ' + value + '-' + newEnd1.toString() + ' )');
+    setLabel1(l.Cable_size + cable1.size + l.fibers+'( ' + value + '-' + newEnd1.toString() + ' )');
   };
   const onChangeStartFiber2 = ({ value }) => {
     let newEnd2 = parseInt(value) + parseInt(numberOfFibers2) - 1;
     setStartFiber2(value);
     setEndFiber2(newEnd2);
-    setLabel2('Cable size ' + cable2.size + ' Fibers( ' + value + '-' + newEnd2.toString() + ' )');
+    setLabel2(l.Cable_size+ cable2.size + l.fibers+'( ' + value + '-' + newEnd2.toString() + ' )');
   };
   const onChangeEndFiber1 = ({ value }) => {
     setEndFiber2(value);
@@ -139,8 +139,8 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
     setNumberOfFibers2(value);
     setEndFiber1(newEnd1);
     setEndFiber2(newEnd2);
-    setLabel1('Cable size ' + cable1.size + ' Fibers( ' + startFiber1 + '-' + newEnd1.toString() + ' )');
-    setLabel2('Cable size ' + cable2.size + ' Fibers( ' + startFiber2 + '-' + newEnd2.toString() + ' )');
+    setLabel1(l.Cable_size + cable1.size + l.fibers+'( ' + startFiber1 + '-' + newEnd1.toString() + ' )');
+    setLabel2(l.Cable_size + cable2.size + l.fibers+'( ' + startFiber2 + '-' + newEnd2.toString() + ' )');
   };
   const onChangeNumberOfFibers2 = ({ value }) => {
     setNumberOfFibers2(value);
@@ -161,9 +161,9 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
             fEnd2: parseInt(endFiber2),
           };
           const res = await updateSplicesTp(data);
-        } else alert('cable 2 fibers exceeds cable size !');
-      } else alert('cable 1 fibers exceeds cable size !');
-    } else alert('please select both cables !');
+        } else alert(l.cable_2_fibers_exceeds);
+      } else alert(l.cable_1_fibers_exceeds);
+    } else alert(l.please_select_both);
 
     let state = spliceFibersPointTp.state;
 
@@ -173,7 +173,7 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
 
     updateState('tp', spliceFibersPointTp.id, state);
     const itemUpdate = changeItemState(spliceFibersPointTp.id, spliceFibersPointTp.name_id, 'tp', state);
-    const res = await logAddInfo(spliceFibersPointTp.name_id, 'Fiber Assignment Changed', 'State changed to "Need to splice"');
+    const res = await logAddInfo(spliceFibersPointTp.name_id, l.Fiber_Assignment_Changed, l.State_changed_to);
 
     getTpDataRequest();
     onClose();
@@ -193,7 +193,7 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
               id: 'id',
               value: 'id',
             }}
-            label="Select cable"
+            label={l.Select_cable}
             options={cable1_Options}
           />
           <Selector
@@ -206,7 +206,7 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
               id: 'id',
               value: 'id',
             }}
-            label="Select cable"
+            label={l.Select_cable}
             options={cable1_Options}
           />
         </Box>
@@ -215,18 +215,18 @@ const SpliceFibersTp = ({ dataFcs, updateState, spliceFibersPointTp, cables, get
           <TextField disabled={true} sx={{ width: '300px' }} size="small" value={label2} />
         </Box>
         <Box display="flex" gap={2} alignItems="flex-start" flexDirection="row">
-          <CustomInput disabled={!cableSelected1} sx={{ width: '300px' }} label="Start Fiber (Cable 1)" name="startFiber1" onChange={onChangeStartFiber1} value={startFiber1} type="number" />
-          <CustomInput disabled={!cableSelected2} sx={{ width: '300px' }} label="Start Fiber (Cable 2)" name="startFiber2" onChange={onChangeStartFiber2} value={startFiber2} type="number" />
+          <CustomInput disabled={!cableSelected1} sx={{ width: '300px' }} label={l.Start_Fiber +l.Cable+' 1'} name="startFiber1" onChange={onChangeStartFiber1} value={startFiber1} type="number" />
+          <CustomInput disabled={!cableSelected2} sx={{ width: '300px' }} label={l.Start_Fiber +l.Cable+' 2'} name="startFiber2" onChange={onChangeStartFiber2} value={startFiber2} type="number" />
         </Box>
         <Box display="flex" gap={2} alignItems="flex-start" flexDirection="row">
-          <CustomInput disabled={!cableSelected1} sx={{ width: '300px' }} label="Number of Fibers Cable 1" name="numFiber2" onChange={onChangeNumberOfFibers1} value={numberOfFibers1} type="number" />
-          <CustomInput disabled={true} sx={{ width: '300px' }} label="Number of Fibers Cable 2" name="numFiber2" onChange={onChangeNumberOfFibers2} value={numberOfFibers2} type="number" />
+          <CustomInput disabled={!cableSelected1} sx={{ width: '300px' }} label={l.Number_Fiber +l.Cable+' 1'} name="numFiber2" onChange={onChangeNumberOfFibers1} value={numberOfFibers1} type="number" />
+          <CustomInput disabled={true} sx={{ width: '300px' }} label={l.Number_Fiber +l.Cable+' 2'} name="numFiber2" onChange={onChangeNumberOfFibers2} value={numberOfFibers2} type="number" />
         </Box>
         <Box display="flex" gap={2} alignItems="flex-start" flexDirection="row">
-          <CustomInput disabled={true} sx={{ width: '300px' }} label="End Fiber Cable 1" name="EndFiber1" onChange={onChangeEndFiber1} value={endFiber1} type="number" />
-          <CustomInput disabled={true} sx={{ width: '300px' }} label="End Fiber Cable 2" name="EndFiber2" onChange={onChangeEndFiber1} value={endFiber2} type="number" />
+          <CustomInput disabled={true} sx={{ width: '300px' }} label={l.End_Fiber +l.Cable+' 1'} name="EndFiber1" onChange={onChangeEndFiber1} value={endFiber1} type="number" />
+          <CustomInput disabled={true} sx={{ width: '300px' }} label={l.End_Fiber +l.Cable+' 2'} name="EndFiber2" onChange={onChangeEndFiber1} value={endFiber2} type="number" />
         </Box>
-        <CustomButton onClick={() => onSaveChanges()}> Save changes </CustomButton>
+        <CustomButton onClick={() => onSaveChanges()}> {l.Save_changes} </CustomButton>
       </Box>
     </ModalWithTitle>
   );

@@ -12,6 +12,7 @@ import { addAccessRequest, removeAccessRequest, removeAccessRequestAndDelete } f
 import { getUserDbRequest } from '../../api/userApi';
 import ControlBox from '../ControlBox';
 import Selector from '../Inputs/Selector';
+import { logAddInfo } from '../../api/logFileApi';
 
 function findProject(newName, newUsersDb) {
   let project = {};
@@ -21,7 +22,7 @@ function findProject(newName, newUsersDb) {
   return project;
 }
 
-const DelProject = ({ onClose }) => {
+const DelProject = ({ l, onClose }) => {
   const [newName, setNewName] = useState('');
   const [dbNames, setDbNames] = useState([]);
   const [dbOptions, setDbOptions] = useState([]);
@@ -46,9 +47,12 @@ const DelProject = ({ onClose }) => {
   };
 
   const onDeleteSelected = () => {
+    const projects =  dbNames.map(({ dbName }) => dbName)
+    const sure = window.confirm(l.Are_you_sure_you_want_to_delete + projects + ' ? ')
+    if (!sure) return
     deleteDbs(changeAccessProps());
-
-    // onClose();
+    logAddInfo(l.project, l.project_deleted, projects);
+    onClose();
   };
 
   const changeAccessProps = () => ({
@@ -62,7 +66,7 @@ const DelProject = ({ onClose }) => {
   const changeDbNames = ({ value }) => setDbNames(value);
 
   return (
-    <ModalWithTitle title="Delete Project(s)" containerSx={{ width: 400 }} close={onClose} open>
+    <ModalWithTitle title={l.Delete_Project} containerSx={{ width: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column">
         <ControlBox>
           <Selector
@@ -75,7 +79,7 @@ const DelProject = ({ onClose }) => {
               id: 'dbName',
               value: 'dbName',
             }}
-            label="Select projects to delete"
+            label={l.Select_projects_to_delete}
             options={dbOptions}
           />
           <CustomButton disabled={!dbNames.length} sx={{ ml: 2 }} color="warning" isLoading={dbDeleting} onClick={onDeleteSelected}>

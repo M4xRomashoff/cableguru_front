@@ -6,8 +6,9 @@ import useApi from '../../hooks/useApi';
 import { getTpPortData, saveTpPortData } from '../../api/dataBasesApi';
 import CustomInput from '../Inputs';
 import CustomButton from '../Button';
+import { logAddInfo } from '../../api/logFileApi';
 
-const PortLabelsModal = ({ onClose, portLabels, getTpDataRequest }) => {
+const PortLabelsModal = ({ l, onClose, portLabels, getTpDataRequest }) => {
   const [labels, setLabels] = useState([]);
 
   const { isLoadingTp: isTpLoading } = useApi({
@@ -33,13 +34,14 @@ const PortLabelsModal = ({ onClose, portLabels, getTpDataRequest }) => {
 
   function onSaveChanges() {
     const response = saveTpPortData(portLabels.id, labels);
+    logAddInfo(portLabels.name_id, l.port_labels_changed, '');
     getTpDataRequest();
     onClose();
   }
   return (
-    <ModalWithTitle title={'Port Labels for :' + portLabels.name_id} containerSx={{ width: 400, height: 400 }} close={onClose} open>
+    <ModalWithTitle title={l.Port_Labels_for + portLabels.name_id} containerSx={{ width: 400, height: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column">
-        <CustomButton onClick={onSaveChanges}>Save Changes</CustomButton>
+        <CustomButton onClick={onSaveChanges}>{l.Save_changes}</CustomButton>
         <Box display="flex" gap={2} alignItems="flex-start" flexDirection="column">
           {labels.map((item, index) => (
             <Box display="flex" gap={2} alignItems="flex-start" flexDirection="row">

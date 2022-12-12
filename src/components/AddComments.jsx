@@ -7,7 +7,7 @@ import ModalWithTitle from './Modals/ModalWithTitle';
 import CustomInput from './Inputs';
 import CustomButton from './Button';
 
-const AddComment = ({ onClose, nameId }) => {
+const AddComment = ({ l, onClose, nameId }) => {
   const [comment, setComment] = useState('');
 
   const onChange = ({ value }) => setComment(value);
@@ -15,7 +15,7 @@ const AddComment = ({ onClose, nameId }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    await logAddInfo(nameId, 'comment', comment);
+    await logAddInfo(nameId, l.comment, comment);
     onClose();
   };
 
@@ -24,11 +24,11 @@ const AddComment = ({ onClose, nameId }) => {
   });
 
   return (
-    <ModalWithTitle title="Add comment" containerSx={{ width: 400 }} close={onClose} open>
+    <ModalWithTitle title={l.Add_comment} containerSx={{ width: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column" onSubmit={createComment}>
-        <CustomInput multiline={true} sx={{ width: '100%' }} value={comment} onChange={onChange} label="Comment" />
+        <CustomInput multiline={true} sx={{ width: '100%' }} value={comment} onChange={onChange} label={l.comment} />
         <CustomButton isLoading={isLoading} type="submit">
-          Send comment
+          {l.Send_comment}
         </CustomButton>
       </Box>
     </ModalWithTitle>

@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { getSessionItem, setSessionItem } from '../../helpers/storage';
 import { addAccessRequest } from '../../api/accessApi';
 import { getUserDbRequest } from '../../api/userApi';
+import { logAddInfo } from '../../api/logFileApi';
 
 function findProject(newName, newUsersDb) {
   let project = {};
@@ -19,7 +20,7 @@ function findProject(newName, newUsersDb) {
   return project;
 }
 
-const NewProject = ({ onClose }) => {
+const NewProject = ({ l, onClose }) => {
   const [newName, setNewName] = useState('');
 
   const { isLoading: addAccessLoading, makeRequest: addAccess } = useApi({
@@ -52,12 +53,10 @@ const NewProject = ({ onClose }) => {
     else {
 
       await createNewProject(newName);
-
       await addAccess(changeAccessProps());
-
       const newUsersDb = await getUserDbRequest(userId);
-
       setSessionItem('project', findProject(newName, newUsersDb));
+      logAddInfo(l.project, l.new_project_created, newName);
 
       navigate(`/map`);
       onClose();
@@ -69,11 +68,11 @@ const NewProject = ({ onClose }) => {
   });
 
   return (
-    <ModalWithTitle title="Create New Project" containerSx={{ width: 400 }} close={onClose} open>
+    <ModalWithTitle title={l.Create_New_Project} containerSx={{ width: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column" onSubmit={createComment}>
-        <CustomInput multiline={true} sx={{ width: '100%' }} value={newName} onChange={onChange} label="Enter name for new project" />
+        <CustomInput multiline={true} sx={{ width: '100%' }} value={newName} onChange={onChange} label={l.Enter_name_for_new_project} />
         <CustomButton isLoading={isLoading} type="submit">
-          Create
+          {l.Create}
         </CustomButton>
       </Box>
     </ModalWithTitle>

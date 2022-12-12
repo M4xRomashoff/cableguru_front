@@ -58,6 +58,7 @@ function App() {
   const [menuLabel, setMenuLabel] = useState();
   const [documents, setDocuments] = useState(false);
   const [l,setL]=useState(langDefault);
+  const [locateMe, setLocateMe]=useState(false);
 
 
 
@@ -75,9 +76,6 @@ function App() {
       setSessionItem('lang','ru');
       setL(langPackRu);
     }
-    // check user system for default language
-
-
 
     setMenuLabel(l.Control_Panel);
 
@@ -92,6 +90,7 @@ function App() {
         <Redirect setUserStore={setUserStore} userStore={userStore} />
         {userStore.id && (
           <Header
+            setLocateMe={setLocateMe}
             l={l}
             setL={setL}
             setDocuments={setDocuments}
@@ -115,6 +114,8 @@ function App() {
             path="/map"
             element={
               <MyMapContainer
+                locateMe={locateMe}
+                setLocateMe={setLocateMe}
                 l={l}
                 documents={documents}
                 setDocuments={setDocuments}

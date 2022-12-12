@@ -12,7 +12,42 @@ const styles = StyleSheet.create({
   myText : {
     fontFamily : "Roboto"
   },
-
+  rowView: {
+    display: 'flex',
+    flexDirection: 'column',
+    border: '3px solid #b3b1b1',
+    // borderBottom: '3px solid #b3b1b1',
+    paddingTop: 8,
+    paddingBottom: 8,
+    marginLeft: 8,
+    marginRight:8,
+    textAlign: "center"
+  },
+  rowView1: {
+    fontFamily : "Roboto",
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: 0,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    textAlign: "left",
+    fontWeight: 'normal',
+    fontSize: 12,
+  },
+  rowView2: {
+    borderBottom: '1px solid #b3b1b1',
+    fontFamily : "Roboto",
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: 0,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    textAlign: "left",
+    fontWeight: 'normal',
+    fontSize: 12,
+  },
 
   page: {
     flexDirection: 'column',
@@ -21,6 +56,7 @@ const styles = StyleSheet.create({
   },
 
   sectionHeader: {
+    fontFamily : "Roboto",
     margin: 10,
     padding: 10,
     flexGrow: 0,
@@ -28,8 +64,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#b3b1b1',
     border: 1,
     textAlign: 'left',
+
   },
   sectionSplice: {
+    fontFamily : "Roboto",
     marginLeft: 10,
     padding: 0,
     flexGrow: 0,
@@ -37,12 +75,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#E4E4E4',
   },
   sectionTable: {
+    fontFamily : "Roboto",
     margin: 10,
     padding: 1,
     flexGrow: 2,
     flexDirection: 'row',
   },
   section1: {
+    fontFamily : "Roboto",
     maxWidth: 150,
     flex: 1,
     padding: 10,
@@ -51,6 +91,7 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   section12: {
+    fontFamily : "Roboto",
     maxWidth: 150,
     flex: 1,
     padding: 10,
@@ -61,6 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#dbd3d3',
   },
   section13: {
+    fontFamily : "Roboto",
     maxWidth: 500,
     flex: 1,
     padding: 10,
@@ -70,23 +112,7 @@ const styles = StyleSheet.create({
     color: 'black',
     backgroundColor: '#dbd3d3',
   },
-  section2: {
-    padding: 1,
-    textAlign: 'center',
-    fontWeight: 'lighter',
-    fontSize: 10,
-    border: 1,
-    color: 'black',
-  },
-  section3: {
-    padding: 1,
-    textAlign: 'center',
-    fontWeight: 'lighter',
-    fontSize: 10,
-    color: 'black',
-    border: 1,
-    backgroundColor: '#dbd3d3',
-  },
+
 });
 
 function MyDocument({ l, item, spliceData }) {
@@ -176,31 +202,38 @@ function MyDocument({ l, item, spliceData }) {
     return (
       <Document>
         <Page size="A4" style={styles.page}>
-          <View style={styles.sectionHeader} key={keyGen()}>
-            <View style={styles.section1} key={keyGen()}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.section1} >
               <Text>{MainHeader0}</Text>
             </View>
-            <View style={styles.section12} key={keyGen()}>
+            <View style={styles.section12}>
               <Text>{MainHeader1}</Text>
             </View>
-            <View style={styles.section13} key={keyGen()}>
+            <View style={styles.section13}>
               <Text>{MainHeader2}</Text>
             </View>
           </View>
-          <View style={styles.sectionSplice} key={keyGen()}>
+          <View style={styles.rowView} >
+          <View style={styles.rowView2} >
             {splBody1.map((option) => (
-              <View style={styles.section2} key={keyGen()}>
-                <Text>{option}</Text>
+              <View style={styles.rowView1}>
+                <Text style={{
+                  width: `${100 / splBody1.length}%`,
+                }}>{option}</Text>
               </View>
             ))}
           </View>
-          <View style={styles.sectionSplice} key={keyGen()}>
+          <View style={styles.rowView1} >
             {splBody2.map((option) => (
-              <View style={styles.section3} key={keyGen()}>
-                <Text>{option}</Text>
+              <View  style={styles.rowView1} >
+                <Text style={{
+                 width: `${100 / splBody2.length}%`
+                }}>{option}</Text>
               </View>
             ))}
           </View>
+          </View>
+
         </Page>
       </Document>
     );

@@ -14,10 +14,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { updateConnectionsAdd, updateConnectionsRemove } from '../api/dataBasesApi';
 import { changeItemState } from '../api/changeItemState';
 
-const ConnectionsControl = ({ updateState, getTpDataRequest, getSpDataRequest, cables, connections, loadConnections, onClose, connectionsPoint, setConnectionsPoint }) => {
+const ConnectionsControl = ({ l, updateState, getTpDataRequest, getSpDataRequest, cables, connections, loadConnections, onClose, connectionsPoint, setConnectionsPoint }) => {
   const [checkedE, setCheckedE] = React.useState([true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]);
   const [checked, setChecked] = React.useState([false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]);
-  let title = 'Connections ' + connectionsPoint.name_id;
+  let title = l.Connections +'  '+ connectionsPoint.name_id;
   let type = '';
   let state = connectionsPoint.state;
   if (!connectionsPoint.spl_type) type = 'tp'; // only sp has spl_type
@@ -154,10 +154,10 @@ const ConnectionsControl = ({ updateState, getTpDataRequest, getSpDataRequest, c
     });
 
     if (connected.length > 0) {
-      const res = await logAddInfo(connectionsPoint.name_id, 'Cable Connected ', connected);
+      const res = await logAddInfo(connectionsPoint.name_id, l.Cable_Connected , connected);
     }
     if (disconnected.length > 0) {
-      const res = await logAddInfo(connectionsPoint.name_id, 'Cable Disconnected ', disconnected);
+      const res = await logAddInfo(connectionsPoint.name_id, l.Cable_Disconnected, disconnected);
     }
 
     loadConnections();
@@ -166,7 +166,7 @@ const ConnectionsControl = ({ updateState, getTpDataRequest, getSpDataRequest, c
   return (
     <ModalWithTitle title={title} containerSx={{ width: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column">
-        <label>Existing connections</label>
+        <label>{l.Existing_connections}</label>
         <FormGroup>
           {existingCon.map((item, index) => (
             <FormControlLabel
@@ -183,7 +183,7 @@ const ConnectionsControl = ({ updateState, getTpDataRequest, getSpDataRequest, c
             />
           ))}
         </FormGroup>
-        <label>Available to connect</label>
+        <label>{l.Available_to_connect}</label>
         <FormGroup>
           {filteredAvailableCon.map((item, index) => (
             <FormControlLabel
@@ -200,7 +200,7 @@ const ConnectionsControl = ({ updateState, getTpDataRequest, getSpDataRequest, c
             />
           ))}
         </FormGroup>
-        <CustomButton onClick={saveChanges}> Save changes</CustomButton>
+        <CustomButton onClick={saveChanges}> {l.Save_changes} </CustomButton>
       </Box>
     </ModalWithTitle>
   );

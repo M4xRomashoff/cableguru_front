@@ -115,7 +115,9 @@ const PrintModal = ({ l, onClose, markersSp, markersTp }) => {
         <BackdropLoading isLoading={isSpLoading || isTpLoading} />
         {stuffToPrint && Boolean(spliceData.header) && (
           <PDFViewer width={850} height={620}>
+            {/*<MyDocument l={l} item={stuffToPrint} spliceData={spliceData} />*/}
             <MyDocument l={l} item={stuffToPrint} spliceData={spliceData} />
+
           </PDFViewer>
         )}
       </Box>

@@ -9,10 +9,15 @@ import { ImageFile } from '../ImageFile';
 import { getSessionItem } from '../../helpers/storage';
 import { FileUpload } from '../File/FileUpload';
 import { PublishSharp } from '@mui/icons-material';
+import useApi from '../../hooks/useApi';
+import { API } from '../../api/api';
+import BackdropLoading from '../BackdropLoading';
+
 
 const  DocumentsModal = ({ l, onClose}) => {
   const [file, setFile] = useState();
   const [docs, setDocs] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   async function getDocs() {
     const docs = await downloadDocumentsLinks();
@@ -31,19 +36,22 @@ const  DocumentsModal = ({ l, onClose}) => {
   }
 
   async function handleUploadClick() {
+    setIsUploading(true);
     const {dbName} =getSessionItem('project');
-    await uploadDocument(file, dbName);
-    logAddInfo('project', 'document uploaded', file?.name);
+    const upload = await uploadDocument(file, dbName);
+    if (upload) setIsUploading(false);
+    logAddInfo(l.project, l.document_uploaded, file?.name);
     getDocs();
     setFile();
   }
+
+
   //
   async function onClickDelete(index) {
-    const sure = window.confirm('Are you sure you want to delete?')
+    const sure = window.confirm(l.Are_you_sure_you_want_to_delete + docs[index].file_name +' ? ')
 
     if (!sure) return
-    logAddInfo('project', 'document deleted', docs[index].file_name);
-
+    logAddInfo(l.project, l.document_deleted, docs[index].file_name);
     await deleteDocument(docs[index]);
     const cloneDocs = docs.slice();
     cloneDocs.splice(index,1);
@@ -68,7 +76,8 @@ const  DocumentsModal = ({ l, onClose}) => {
           endIcon={<PublishSharp />}
           label={l.New_Document}
         />
-        {file && <CustomButton color="warning" onClick={handleUploadClick}>{l.Upload_Document}</CustomButton>}
+        {file && !isUploading && <CustomButton color="warning" onClick={handleUploadClick}>{l.Upload_Document}</CustomButton>}
+        { isUploading && <BackdropLoading position='relative' isLoading />}
         <Box display='flex' gap={2} flexDirection='column'>
           {Boolean(docs.length > 0) &&
             docs.map((doc, index) => (

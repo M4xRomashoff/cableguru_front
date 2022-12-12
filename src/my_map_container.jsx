@@ -12,7 +12,7 @@ import DocumentsModal from './components/Modals/DocumentsModal';
 
 let centerDefault = [51.515, -0.09];
 
-function MyMapContainer({ l, documents, setDocuments, lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
+function MyMapContainer({ setLocateMe, locateMe, l, documents, setDocuments, lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
   const [center, setCenter] = useState([]);
   const [readySp, setReadySp] = useState(false);
   const [readyTp, setReadyTp] = useState(false);
@@ -176,6 +176,8 @@ function MyMapContainer({ l, documents, setDocuments, lb, setLb, setSetting, set
       <MyData />
       {readyCab && readyCon && readyTp && readySp && (
         <MyMap
+          locateMe={locateMe}
+          setLocateMe={setLocateMe}
           l={l}
           traceIsOpen={traceIsOpen}
           routeDetailsIsOpen={routeDetailsIsOpen}

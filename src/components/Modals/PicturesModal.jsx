@@ -9,10 +9,12 @@ import { ImageFile } from '../ImageFile';
 import { getSessionItem } from '../../helpers/storage';
 import { FileUpload } from '../File/FileUpload';
 import { PublishSharp } from '@mui/icons-material';
+import BackdropLoading from '../BackdropLoading';
 
-const PicturesModal = ({ onClose, picturesInfo }) => {
+const PicturesModal = ({ l, onClose, picturesInfo }) => {
   const [file, setFile] = useState();
   const [imagesLinks, setImagesLinks] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   async function getImages(type) {
     const imagesLinks = await downloadPicturesLinks(picturesInfo.id, type);
@@ -33,8 +35,10 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
   }
 
   async function handleUploadClick() {
-    await uploadPicture(file, picturesInfo);
-    logAddInfo(picturesInfo.name_id, 'Picture Uploaded', file?.name);
+    setIsUploading(true);
+    const upload = await uploadPicture(file, picturesInfo);
+    if (upload) setIsUploading(false);
+    logAddInfo(picturesInfo.name_id, l.Picture_Uploaded, file?.name);
     let type = 'sp';
     if (picturesInfo.connector) type = 'tp';
     setFile()
@@ -42,7 +46,7 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
   }
 
   async function onClickDelete(index) {
-    const sure = window.confirm('Are you sure you want to delete?')
+    const sure = window.confirm(l.Are_you_sure_you_want_to_delete)
 
     if (!sure) return
 
@@ -54,7 +58,7 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
 
   return (
     <ModalWithTitle
-      title={'Pictures for :' + picturesInfo.name_id}
+      title={l.Pictures_for + picturesInfo.name_id}
       containerSx={{ width: 600, height: 600 }}
       close={onClose}
       open
@@ -68,9 +72,10 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
           files={[file]}
           extensions={['png', 'svg', 'jpeg', 'jpg']}
           endIcon={<PublishSharp />}
-          label='New image'
+          label={l.New_image}
         />
-        {file && <CustomButton color="warning" onClick={handleUploadClick}>Upload Picture</CustomButton>}
+        {file && !isUploading &&<CustomButton color="warning" onClick={handleUploadClick}>{l.Upload_Picture}</CustomButton>}
+        { isUploading && <BackdropLoading position='relative' isLoading />}
         <Box display='flex' gap={2} flexDirection='column'>
           {Boolean(imagesLinks.length > 0) &&
             imagesLinks.map((image, index) => (
@@ -79,7 +84,7 @@ const PicturesModal = ({ onClose, picturesInfo }) => {
                 <p>{image.user_name}</p>
                 <p>uploaded on : </p>
                 <p>{image.date.slice(0, 10)}</p>
-                <CustomButton onClick={() => onClickDelete(index)}> delete picture </CustomButton>
+                <CustomButton onClick={() => onClickDelete(index)}> {l.delete_picture} </CustomButton>
               </Box>
             ))}
         </Box>

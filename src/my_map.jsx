@@ -61,24 +61,7 @@ function convertToString(points) {
   return text;
 }
 
-function LocationMarker() {
-  const [position, setPosition] = useState(null);
-  const map = useMapEvents({
-    click() {
-      map.locate();
-    },
-    locationfound(e) {
-      setPosition(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
-    },
-  });
 
-  return position === null ? null : (
-    <Marker position={position}>
-      <Popup>You are here</Popup>
-    </Marker>
-  );
-}
 
 function isIn(arr, item) {
   let flag = false;
@@ -140,6 +123,8 @@ const useStyles = makeStyles((theme) => ({
 //--------------------------------------------------------------------------------------------------MyMap---------------
 
 const MyMap = ({
+  locateMe,
+  setLocateMe,
   l,
   setTraceIsOpen,
   routeDetailsIsOpen,
@@ -194,6 +179,28 @@ const MyMap = ({
   let userAccessLevel = 0;
   const userAccessLevelTemp = getSessionItem('user');
   if (userAccessLevelTemp !== null) userAccessLevel = userAccessLevelTemp.access_level;
+
+
+  function LocationMarker() {
+    const [position, setPosition] = useState(null);
+    const map = useMapEvents({
+      click() {
+        map.locate();
+      },
+      locationfound(e) {
+        setPosition(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+      },
+    });
+
+    return position === null ? null : (
+      <Marker position={position}>
+        <Popup>You are here</Popup>
+      </Marker>
+    );
+    setLocateMe(false);
+  }
+
 
 
   function getLayerBySpId(spId, myMap) {
@@ -717,7 +724,7 @@ const MyMap = ({
     <div>
       <BackdropLoading isLoading={isSpLoading || isTpLoading} />
       {portLabels.id &&
-        <PortLabelsModal onClose={onClosePortLabels} portLabels={portLabels} getTpDataRequest={getTpDataRequest} />}
+        <PortLabelsModal l={l}  onClose={onClosePortLabels} portLabels={portLabels} getTpDataRequest={getTpDataRequest} />}
       {routeDetailsIsOpen && Boolean(trace.length>0)&&<RouteDetails
         l={l}
         trace={trace}
@@ -898,6 +905,9 @@ const MyMap = ({
           </LayersControl.Overlay>
           <LayersControl.Overlay checked name={l.Trace}>
             <PrepTracesList trace={trace} setTrace={setTrace} />
+          </LayersControl.Overlay>
+          <LayersControl.Overlay checked name={l.MyLocation}>
+            {locateMe && <LocationMarker/>}
           </LayersControl.Overlay>
         </LayersControl>
       </MapContainer>

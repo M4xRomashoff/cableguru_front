@@ -72,8 +72,8 @@ const Home = ({ l, setMenuLabel }) => {
 
   return (
     <Box display="flex" pt={5} justifyContent="center" alignItems="center">
-      {projectModal && <NewProject onClose={onCloseNewProject} />}
-      {delProjectModal && <DelProject onClose={onCloseDelProject} />}
+      {projectModal && <NewProject l={l} onClose={onCloseNewProject} />}
+      {delProjectModal && <DelProject l={l} onClose={onCloseDelProject} />}
       <Box gap={2} display="flex" flexDirection="column" alignItems="flex-start" width="fit-content">
         <Selector sx={{ width: '250px' }} onChange={changeUserProject} value={userProject} label={l.Select_Project} fields={{ label: 'dbName', value: 'id' }} options={userDb} />
         <Box gap={2} display="flex" flexDirection="row" alignItems="flex-start" width="fit-content">
