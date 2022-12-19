@@ -16,7 +16,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
     width: '100vw',
   },
   [theme.breakpoints.up('md')]: {
-    width: '65vw',
+    width: 'fit-content',
   },
 }));
 

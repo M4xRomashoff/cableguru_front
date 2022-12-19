@@ -18,6 +18,7 @@ import { useState } from 'react';
 import logo from './icons/cableguru_logo_60.png';
 import langPackRu from '../assets/ru.json';
 import langPackEn from '../assets/en.json';
+import UserProfile from './Modals/UserProfile';
 
 
 function LogoutClick() {
@@ -25,12 +26,15 @@ function LogoutClick() {
   refreshPage();
 }
 
-export default function Header({ setLocateMe, l, setL, setLb, setSetting, setSearch, setPrint, setHistory, setRouteDetailsIsOpen, setTraceIsOpen, menuLabel, setMenuLabel, setDocuments }) {
+
+
+export default function Header({ setContact, setLocateMe, l, setL, setLb, setSetting, setSearch, setPrint, setHistory, setRouteDetailsIsOpen, setTraceIsOpen, menuLabel, setMenuLabel, setDocuments }) {
   const { userStore } = useUserStore();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElLang, setAnchorElLang] = React.useState(null);
   const [openMenu, setOpenMenu] = useState(false);
   const [language, setLanguage]= useState(l.Language);
+  const [profileIsOpen, setProfileIsOpen] =useState(false);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,10 +43,20 @@ export default function Header({ setLocateMe, l, setL, setLb, setSetting, setSea
     setAnchorElLang(event.currentTarget);
   };
 
+
+  function ProfileClick() {
+    setProfileIsOpen(true);
+    setAnchorEl(null);
+  }
+
   const handleClose = (callback) => () => {
     callback?.();
     setAnchorEl(null);
   };
+
+  function onCloseProfile(){
+    setProfileIsOpen(false);
+  }
 
   const handleCloseLang = (lng) => () => {
 
@@ -61,8 +75,11 @@ export default function Header({ setLocateMe, l, setL, setLb, setSetting, setSea
   };
 
   return (
+
     <Box sx={{ flexGrow: 1 }}>
+      {profileIsOpen && <UserProfile l={l} onClose={onCloseProfile}/>}
       <TemporaryDrawer
+        setContact={setContact}
         setLocateMe={setLocateMe}
         l={l}
         setDocuments={setDocuments}
@@ -109,7 +126,7 @@ export default function Header({ setLocateMe, l, setL, setLb, setSetting, setSea
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose()}>
-              <MenuItem onClick={handleClose()}>{l.Profile}</MenuItem>
+              <MenuItem onClick={() => ProfileClick()}>{l.Profile}</MenuItem>
               <MenuItem onClick={handleClose(LogoutClick)}>{l.Logout}</MenuItem>
             </Menu>
 

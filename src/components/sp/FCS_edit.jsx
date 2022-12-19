@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import '../Home/Home.css';
 import { Box } from '@mui/material';
 import ModalWithTitle from '../Modals/ModalWithTitle';
@@ -17,20 +17,8 @@ import { logAddInfo } from '../../api/logFileApi';
 import { getSessionItem, setSessionItem } from '../../helpers/storage';
 import CustomInput from '../Inputs';
 import MenuItem from '@mui/material/MenuItem';
+import useTableKeyGen from '../../hooks/useTableKeyGen';
 
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-    padding: 1,
-    fontSize: 12,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 12,
-    padding: 1,
-  },
-}));
 const StyledTableCell2 = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.dark,
@@ -39,19 +27,6 @@ const StyledTableCell2 = styled(TableCell)(({ theme }) => ({
     fontSize: 12,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 16,
-    padding: 1,
-  },
-}));
-const StyledTableCell3 = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.white,
-    padding: 1,
-    fontSize: 12,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    color: theme.palette.common.white,
     fontSize: 16,
     padding: 1,
   },
@@ -67,39 +42,27 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const initialForm = {
-  name_id: '',
-  owner: '',
-  address: '',
-  mfg: '',
-  model: '',
-  capacity: '',
-  spl_type: '',
-  mount: '',
-  state: '',
-  position: '',
-  icon: '',
-  birthday: '',
-  last_update: '',
-};
-
-const hasFormValue = (form) => Object.values(form).some((item) => Boolean(item));
+const buttonContainer = {
+  display: "flex",
+  flexWrap:"wrap",
+  gap: 1,
+  alignItems: "flex-start",
+  flexDirection:"row"
+}
 
 function getLoggedInSp(id) {
-  const result = getSessionItem('LoggedInSp');
-  if (getSessionItem('LoggedInSp') === null) {
+  const LoggedInSp = getSessionItem('LoggedInSp');
+
+  if (LoggedInSp === null) {
     setSessionItem('LoggedInSp', []);
     return false;
   } else {
-    let arr = getSessionItem('LoggedInSp');
-    if (arr.includes(id)) return true;
-    else return false;
+    return Boolean(LoggedInSp.includes(id));
   }
 }
 
 function getIsCompleted(state) {
-  if (state === 2) return false;
-  return true;
+  return state !== 2;
 }
 
 const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPointInfo, pointInfoFCS, dataFcs, markers, setMarkersSp, loadMarkersSp, setConnectionsPoint, setPicturesInfo }) => {
@@ -271,18 +234,17 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
     setIsChange(false);
   }
 
-  function keyGen() {
-    let number = Math.random();
-    return number;
-  }
+
 
   const userAccessLevel = getSessionItem('user').access_level;
+
+  const { headerKeys, bodyKeys, bodyFullKeys } = useTableKeyGen({ tableData: dataFcs })
 
   return (
     <ModalWithTitle title={form.name_id} close={onClose} open>
       <Box component="form" display="flex" gap={1} alignItems="flex-start" flexDirection="column">
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
-          <CustomButton onClick={fullShort}> {l.Full_Short}</CustomButton>
+        <Box sx={buttonContainer}>
+          <CustomButton onClick={fullShort}>{l.Full_Short}</CustomButton>
           {userAccessLevel >= 70 &&<CustomButton disabled={!isChange} onClick={() => saveChanges()}>
             {l.Save_changes}
           </CustomButton>}
@@ -294,7 +256,7 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
           </CustomButton>}
           {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickSpliceFibers(pointInfoFCS)}>{l.Splice_Fibers}</CustomButton>}
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickConnections(pointInfoFCS)}>{l.Connections}</CustomButton>}
           {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickComments(pointInfoFCS)}>{l.Comments}</CustomButton>}
           {userAccessLevel >= 70 &&<CustomButton disabled={isCompleted} onClick={() => OnClickComplete()}>
@@ -303,12 +265,12 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
           {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickPictures()}>{l.Pictures}</CustomButton>}
           {userAccessLevel >= 70 &&<CustomButton onClick={() => OnClickSeq()}>{l.Change_Sequential_Numbers}</CustomButton>}
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput label={l.id} name="name_id" onChange={onChange} value={form.name_id} />
           <CustomInput label={l.Owner} name="owner" onChange={onChange} value={form.owner} />
           <CustomInput label={l.Address} name="address" onChange={onChange} value={form.address} />
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput label={l.Manufacturer} name="mfg" onChange={onChange} value={form.mfg} />
           <CustomInput label={l.Model} name="model" onChange={onChange} value={form.model} />
           <CustomInput sx={{ width: '220px' }} select label={l.Capacity} name="capacity" onChange={onChange} value={form.capacity}>
@@ -319,7 +281,7 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
             ))}
           </CustomInput>
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput sx={{ width: '220px' }} select label={l.Splice_Type} name="spl_type" onChange={onChange} value={form.spl_type}>
             {splOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -342,7 +304,7 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
             ))}
           </CustomInput>
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput disabled label={l.Birthday} name="birthday" onChange={onChange} value={form.birthday.slice(0, 10)} />
           <CustomInput disabled label={l.Last_update} name="last_update" onChange={onChange} value={form.last_update.slice(0, 10)} />
           <CustomInput disabled label={l.Latitude} name="position" onChange={onChange} value={form.position[0]} />
@@ -352,10 +314,10 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 300 }} aria-label="customized table">
             <TableHead>
-              {dataFcs.header.map((row) => (
-                <StyledTableRow key={keyGen()}>
-                  {row.map((cellHeader) => (
-                    <StyledTableCell2 key={keyGen()} align="left">
+              {dataFcs.header.map((row, index) => (
+                <StyledTableRow key={headerKeys[index].id}>
+                  {row.map((cellHeader, rowIndex) => (
+                    <StyledTableCell2 key={headerKeys[index].rows[rowIndex]} align="left">
                       {cellHeader}
                     </StyledTableCell2>
                   ))}
@@ -364,10 +326,10 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
             </TableHead>
             {full && (
               <TableBody>
-                {dataFcs.body.map((row) => (
-                  <StyledTableRow key={keyGen()}>
-                    {row?.map?.((cellBody) => (
-                      <StyledTableCell2 key={keyGen()} align="left">
+                {dataFcs.body.map((row, index) => (
+                  <StyledTableRow key={bodyKeys[index].id}>
+                    {row?.map?.((cellBody, rowIndex) => (
+                      <StyledTableCell2 key={bodyKeys[index].rows[rowIndex]} align="left">
                         {cellBody}
                       </StyledTableCell2>
                     ))}
@@ -377,10 +339,10 @@ const FCS_edit = ({ l, setChangeSeqPoint, setSpliceFibersPoint, onClose, setPoin
             )}
             {!full && (
               <TableBody>
-                {dataFcs.bodyFull.map((row) => (
-                  <StyledTableRow key={keyGen()}>
-                    {row?.map?.((cellBody) => (
-                      <StyledTableCell2 key={keyGen()} align="left">
+                {dataFcs.bodyFull.map((row,index) => (
+                  <StyledTableRow key={bodyFullKeys[index].id}>
+                    {row?.map?.((cellBody, rowIndex) => (
+                      <StyledTableCell2 key={bodyFullKeys[index].rows[rowIndex]} align="left">
                         {cellBody}
                       </StyledTableCell2>
                     ))}

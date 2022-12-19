@@ -21,7 +21,7 @@ const initialUserInput = {
   company: '',
 };
 
-const AddUser = ({ onClose, getUsers }) => {
+const AddUser = ({ l, onClose, getUsers }) => {
   const [userInput, setUserInput] = useState({ ...initialUserInput });
   const [errors, setErrors] = useState({ ...initialUserInput });
   const [accessLevelList, setAccessLevelList] = useState({});
@@ -30,6 +30,20 @@ const AddUser = ({ onClose, getUsers }) => {
   const clearUserInput = () => setUserInput({ ...initialUserInput });
 
   const { email, name, password, password_confirmation, password_hint, phone, company } = userInput;
+
+
+  const UserInputValues = {
+    name: l.name,
+    password: l.password,
+    password_confirmation: l.password_confirmation,
+    password_hint: l.password_hint,
+    email: l.email,
+    phone: l.phone,
+    company: l.company,
+  };
+
+
+
 
   const onChange = ({ value, name }) => {
     setUserInput((prevState) => ({
@@ -45,13 +59,13 @@ const AddUser = ({ onClose, getUsers }) => {
 
   useEffect(() => {
     setAccessLevelList([
-      { name: 'admin', value: 80 },
-      { name: 'Engineer', value: 79 },
-      { name: 'Project Manager', value: 78 },
-      { name: 'Construction Manager', value: 77 },
-      { name: 'Splicer', value: 70 },
-      { name: 'Construction Crew', value: 60 },
-      { name: 'Guest', value: 50 },
+      { name: l.admin, value: 80 },
+      { name: l.Engineer, value: 79 },
+      { name: l.Project_Manager, value: 78 },
+      { name: l.Construction_Manager, value: 77 },
+      { name: l.Splicer, value: 70 },
+      { name: l.Construction_Crew, value: 60 },
+      { name: l.Guest, value: 50 },
     ]);
   }, []);
 
@@ -61,19 +75,17 @@ const AddUser = ({ onClose, getUsers }) => {
     const { hasErrors, validField } = formValidator({
       form: userInput,
       customRules: [
-        { name: 'name', text: 'Name too low', valid: (item) => validateName(item) },
+        { name: 'name', text: l.Name_too_short, valid: (item) => validateName(item) },
         { name: 'password' },
         { name: 'password_confirmation' },
-        // { name: 'password_hint' },
         { name: 'email' },
-        { name: 'phone (088 890 8989)', text: 'Invalid phone', valid: (item) => item.length === 10 },
-        { name: 'company', text: 'Company name is wrong', valid: (item) => item.length > 1 },
+        { name: 'phone', text: l.Invalid_phone, valid: (item) => item.length === 10 },
+        { name: 'company', text: l.Company_name_is_wrong, valid: (item) => item.length > 1 },
       ],
       inputRule: {
         name: ['name'],
         password: ['password'],
         password_confirmation: ['password_confirmation'],
-        // password_hint: ['password_hint'],
         email: ['email'],
         phone: ['phone'],
         company: ['company'],
@@ -96,15 +108,15 @@ const AddUser = ({ onClose, getUsers }) => {
   const changeAccessLevel = ({ value }) => setAccessItem(value);
 
   return (
-    <ModalWithTitle title="Create User" containerSx={{ width: 400 }} close={onClose} open>
+    <ModalWithTitle title={l.Create_User} containerSx={{ width: 400 }} close={onClose} open>
       <Box component="form" display="flex" gap={2} alignItems="flex-start" flexDirection="column" onSubmit={createUser}>
         {Object.keys(initialUserInput).map((key) => {
           const type = ['password', 'password_confirmation'].includes(key) ? 'password' : 'text';
 
-          return <CustomInput sx={{ width: '100%' }} error={errors[key]} key={key} name={key} type={type} value={userInput[key]} onChange={onChange} label={key} />;
+          return <CustomInput sx={{ width: '100%' }} error={errors[key]} key={key} name={key} type={type} value={userInput[key]} onChange={onChange} label={UserInputValues[key] } />;
         })}
-        <Selector sx={{ width: '100px', padding: '2px' }} onChange={changeAccessLevel} value={accessItem} label="Access Level" fields={{ label: 'name', value: 'value' }} options={accessLevelList} />
-        <CustomButton type="submit">Create</CustomButton>
+        <Selector sx={{ width: '100px', padding: '2px' }} onChange={changeAccessLevel} value={accessItem} label={l.Access_Level} fields={{ label: 'name', value: 'value' }} options={accessLevelList} />
+        <CustomButton type="submit">{l.Create}</CustomButton>
       </Box>
     </ModalWithTitle>
   );

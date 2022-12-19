@@ -3,11 +3,6 @@ import { getSessionItem } from '../helpers/storage';
 import proj4 from 'proj4';
 import convertToString from '../helpers/CablePointsToString';
 
-function convertCRS(lat, long) {
-  var newpoint = proj4('EPSG:4326', 'EPSG:3857', [lat, long]);
-
-  return newpoint;
-}
 
 export async function getDbList() {
   return await API.get('/data-bases').then(({ data }) => data);
@@ -119,7 +114,6 @@ export async function getTpData(tpId) {
 
 export async function getTpPortData(tpId) {
   let project = getSessionItem('project');
-  const dbAndId = project?.dbName + ',' + tpId.toString();
 
   return await API.get(`/db-tp-ports/${project?.dbName},${tpId}`).then(({ data }) => data);
 }
@@ -173,7 +167,6 @@ export async function loadHistory(dbName) {
 
 export async function getTrace(tpId, port) {
   let project = getSessionItem('project');
-  const dbAndId = project?.dbName;
 
   return await API.get(`/db-getTrace/${project?.dbName},${tpId},${port}`).then(({ data }) => data);
 }
@@ -734,8 +727,7 @@ export async function deleteDocument(item) {
 }
 
 export async function deletePicture(item) {
-  let itemType = 'sp';
-  if (item.connector) itemType = 'tp';
+
   const project = getSessionItem('project');
   const { user_id, dbName } = project;
 
@@ -752,6 +744,28 @@ export async function deletePicture(item) {
     },
   };
   let response = await API_multipart(options);
+  let responseOK = response && response.status === 200 && response.statusText === 'OK';
+
+  if (responseOK) return await response.data;
+}
+
+export async function updateUserInfo(user) {
+
+  let url = `/users/update/`;
+  let options = {
+    method: 'POST',
+    url,
+    data: {
+      userId: parseInt(user.id),
+      name: user.user_name,
+      company: user.company,
+      phone: user.phone,
+      email: user.user_email,
+      password: user?.password,
+      password_hint: user?.password_hint,
+    },
+  };
+  let response = await API(options);
   let responseOK = response && response.status === 200 && response.statusText === 'OK';
 
   if (responseOK) return await response.data;

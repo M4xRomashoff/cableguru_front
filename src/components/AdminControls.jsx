@@ -11,7 +11,7 @@ import { useUserStore } from '../store';
 import useDeleteModal from '../hooks/useDeleteModal';
 import { addAccessRequest, removeAccessRequest } from '../api/accessApi';
 import ControlBox from './ControlBox';
-import Swal from 'sweetalert2';
+
 
 
 function AdminControlsContainer({l}) {
@@ -156,7 +156,7 @@ function AdminControlsContainer({l}) {
       <CustomButton className="button" onClick={() => setIsOpen(true)}>
         {l.Add_User}
       </CustomButton>
-      {isOpen && <AddUser onClose={() => setIsOpen(false)} getUsers={getUsers} />}
+      {isOpen && <AddUser l={l} onClose={() => setIsOpen(false)} getUsers={getUsers} />}
       <ControlBox>
         <Selector sx={{ width: '250px' }} onChange={changeSelectedUser} value={selectedUser} label={l.Select_User} fields={{ label: 'user_name', value: 'id' }} options={usersList} />
         <CustomButton color="error" disabled={noSelectedUser} onClick={onDeleteUser} sx={{ width: '120px', marginTop: '4px' }}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Marker, Polyline, Popup, Tooltip, CircleMarker } from 'react-leaflet';
 import { FeatureGroup } from 'react-leaflet';
 import { getCablePointsFromString, getOnePointFromString } from '../../helpers/getCablePointsFromString';

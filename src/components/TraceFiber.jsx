@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Home/Home.css';
 import { Box } from '@mui/material';
-import { logAddInfo } from '../api/logFileApi';
-import useApi from '../hooks/useApi';
 import ModalWithTitle from './Modals/ModalWithTitle';
 import CustomInput from './Inputs';
 import CustomButton from './Button';

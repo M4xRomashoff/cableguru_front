@@ -18,6 +18,7 @@ import { logAddInfo } from '../../api/logFileApi';
 import { getSessionItem, setSessionItem } from '../../helpers/storage';
 import CustomInput from '../Inputs';
 import MenuItem from '@mui/material/MenuItem';
+import useTableKeyGen from '../../hooks/useTableKeyGen';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -95,6 +96,14 @@ function getLoggedInTp(id) {
     if (arr.includes(id)) return true;
     else return false;
   }
+}
+
+const buttonContainer = {
+  display: "flex",
+  flexWrap:"wrap",
+  gap: 1,
+  alignItems: "flex-start",
+  flexDirection:"row"
 }
 
 function getIsCompleted(state) {
@@ -309,10 +318,12 @@ const FCS_Tp_edit = ({
 
   const userAccessLevel = getSessionItem('user').access_level;
 
+  const { headerKeys, bodyKeys, bodyFullKeys } = useTableKeyGen({ tableData: dataFcs })
+
   return (
     <ModalWithTitle title={form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
       <Box component="form" display="flex" gap={1} alignItems="flex-start" flexDirection="column">
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomButton onClick={fullShort}>{l.Full_Short}</CustomButton>
           {userAccessLevel >= 70 &&<CustomButton disabled={!isChange} onClick={saveChanges}>
             {l.Save_changes}
@@ -325,7 +336,7 @@ const FCS_Tp_edit = ({
           </CustomButton>}
           {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickSpliceFibers(pointInfoFCS)}>{l.Splice_Fibers}</CustomButton>}
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           {userAccessLevel >= 79 &&<CustomButton onClick={() => OnClickConnections(pointInfoFCS)}>{l.Connections}</CustomButton>}
           {userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickComments(pointInfoFCS)}>{l.Comments}</CustomButton>}
           {userAccessLevel >= 70 &&<CustomButton disabled={isCompleted} onClick={() => OnClickComplete()}>
@@ -335,12 +346,12 @@ const FCS_Tp_edit = ({
           {userAccessLevel >= 70 &&<CustomButton onClick={() => OnClickPortLabels()}>{l.Port_Labels}</CustomButton>}
           {userAccessLevel >= 70 &&<CustomButton onClick={() => OnClickSeq()}>{l.Change_Sequential_Numbers}</CustomButton>}
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput label={l.id} name="name_id" onChange={onChange} value={form.name_id} />
           <CustomInput label={l.Owner} name="owner" onChange={onChange} value={form.owner} />
           <CustomInput label={l.Address} name="address" onChange={onChange} value={form.address} />
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput label={l.Manufacturer} name="mfg" onChange={onChange} value={form.mfg} />
           <CustomInput label={l.Model} name="model" onChange={onChange} value={form.model} />
           <CustomInput sx={{ width: '220px' }} select label={l.Connector} name="connector" onChange={onChange} value={form.connector}>
@@ -351,7 +362,7 @@ const FCS_Tp_edit = ({
             ))}
           </CustomInput>
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput label={l.Access} name="access" onChange={onChange} value={form.access} />
           <CustomInput sx={{ width: '220px' }} select label={l.Capacity} name="capacity" onChange={onChange} value={form.capacity}>
             {capacityOptions.map((option) => (
@@ -369,7 +380,7 @@ const FCS_Tp_edit = ({
             ))}
           </CustomInput>
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput disabled label={l.Birthday} name="birthday" onChange={onChange} value={form.birthday.slice(0, 10)} />
           <CustomInput disabled label={l.Last_update} name="last_update" onChange={onChange} value={form.last_update.slice(0, 10)} />
           <CustomInput disabled label={l.Latitude} name="position" onChange={onChange} value={form.position[0]} />
@@ -379,10 +390,10 @@ const FCS_Tp_edit = ({
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 300 }} aria-label="customized table">
             <TableHead>
-              {dataFcs.header.map((row) => (
-                <StyledTableRow key={keyGen()}>
-                  {row.map((cellHeader) => (
-                    <StyledTableCell2 key={keyGen()} align="left">
+              {dataFcs.header.map((row, index) => (
+                <StyledTableRow key={headerKeys[index].id}>
+                  {row.map((cellHeader, rowIndex) => (
+                    <StyledTableCell2 key={headerKeys[index].rows[rowIndex]} align="left">
                       {cellHeader}
                     </StyledTableCell2>
                   ))}
@@ -391,10 +402,10 @@ const FCS_Tp_edit = ({
             </TableHead>
             {full && (
               <TableBody>
-                {dataFcs.body.map((row) => (
-                  <StyledTableRow key={keyGen()}>
-                    {row?.map?.((cellBody) => (
-                      <StyledTableCell2 key={keyGen()} align="left">
+                {dataFcs.body.map((row, index) => (
+                  <StyledTableRow key={bodyKeys[index].id}>
+                    {row?.map?.((cellBody,rowIndex) => (
+                      <StyledTableCell2 key={bodyKeys[index].rows[rowIndex]} align="left">
                         {cellBody}
                       </StyledTableCell2>
                     ))}
@@ -404,10 +415,10 @@ const FCS_Tp_edit = ({
             )}
             {!full && (
               <TableBody>
-                {dataFcs.bodyFull.map((row) => (
-                  <StyledTableRow key={keyGen()}>
-                    {row?.map?.((cellBody) => (
-                      <StyledTableCell2 key={keyGen()} align="left">
+                {dataFcs.bodyFull.map((row, index) => (
+                  <StyledTableRow key={bodyFullKeys[index].id}>
+                    {row?.map?.((cellBody,rowIndex) => (
+                      <StyledTableCell2 key={bodyFullKeys[index].rows[rowIndex]} align="left">
                         {cellBody}
                       </StyledTableCell2>
                     ))}

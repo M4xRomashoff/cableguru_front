@@ -19,6 +19,7 @@ export function validateName(name) {
 }
 
 export function validatePass(pass) {
+  if (pass.length <6) return false;
   var re = /^[a-zA-Z0-9]+$/;
   return re.test(pass);
 }

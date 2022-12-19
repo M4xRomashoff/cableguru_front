@@ -17,20 +17,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Stack from '@mui/material/Stack';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-const initialForm = {
-  name_id: '',
-  owner: '',
-  mfg: '',
-  model: '',
-  capacity: '',
-  f_type: '',
-  p_type: '',
-  c_type: '',
-  state: '',
-  points: '',
-  birthday: '',
-  last_update: '',
-};
 
 const hasFormValue = (form) => Object.values(form).some((item) => Boolean(item));
 
@@ -49,6 +35,14 @@ function getLoggedInCables(id) {
 function getIsCompleted(state) {
   if (state === 0) return false;
   return true;
+}
+
+const buttonContainer = {
+  display: "flex",
+  flexWrap:"wrap",
+  gap: 1,
+  alignItems: "flex-start",
+  flexDirection:"row"
 }
 
 const Cable_edit = ({ l, setPointInfo, onClose, pointInfoCable, cables, loadCables, loadConnections, setCables }) => {
@@ -211,7 +205,7 @@ const Cable_edit = ({ l, setPointInfo, onClose, pointInfoCable, cables, loadCabl
   return (
     <ModalWithTitle title={form.name_id} containerSx={{ width: '50%' }} close={onClose} open>
       <Box component="form" display="flex" gap={1} alignItems="flex-start" flexDirection="column">
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           {userAccessLevel >= 60 &&<CustomButton disabled={!isChange} onClick={saveChanges}>
             {l.Save_changes}
           </CustomButton>}
@@ -227,7 +221,7 @@ const Cable_edit = ({ l, setPointInfo, onClose, pointInfoCable, cables, loadCabl
           </CustomButton>}
           {/*{userAccessLevel >= 60 &&<CustomButton onClick={() => OnClickPictures()}>{l.Pictures}</CustomButton>}*/}
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput label={l.id} name="name_id" onChange={onChange} value={form.name_id} />
           <CustomInput label={l.Manufacturer} name="mfg" onChange={onChange} value={form.mfg} />
           <CustomInput label={l.Model} name="model" onChange={onChange} value={form.model} />
@@ -253,7 +247,7 @@ const Cable_edit = ({ l, setPointInfo, onClose, pointInfoCable, cables, loadCabl
             </Stack>
           </LocalizationProvider>
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput sx={{ width: '220px' }} select label={l.Fiber_type} name="f_type" onChange={onChange} value={form.f_type}>
             {fTypeOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -277,7 +271,7 @@ const Cable_edit = ({ l, setPointInfo, onClose, pointInfoCable, cables, loadCabl
           </CustomInput>
           <CustomInput disabled label={l.Last_update} name="last_update" onChange={onChange} value={form.last_update.slice(0, 10)} />
         </Box>
-        <Box display="flex" gap={1} alignItems="flex-start" flexDirection="row">
+        <Box sx={buttonContainer}>
           <CustomInput sx={{ width: '220px' }} select label={l.Size} name="capacity" onChange={onChange} value={form.capacity}>
             {capacityOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>

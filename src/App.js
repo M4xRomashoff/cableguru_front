@@ -6,7 +6,7 @@ import Preferences from './components/Preferences/Preferences';
 import Login from './components/Login/Login';
 import Home from './pages/Home';
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { getSessionItem, getUserSession, setSessionItem } from './helpers/storage';
+import { getUserSession, setSessionItem } from './helpers/storage';
 import Header from './components/Header';
 import { useUserStore } from './store';
 import ModalDelete from './components/Modals/ModalDelete';
@@ -59,6 +59,7 @@ function App() {
   const [documents, setDocuments] = useState(false);
   const [l,setL]=useState(langDefault);
   const [locateMe, setLocateMe]=useState(false);
+  const [contact, setContact]=useState(false);
 
 
 
@@ -90,6 +91,7 @@ function App() {
         <Redirect setUserStore={setUserStore} userStore={userStore} />
         {userStore.id && (
           <Header
+            setContact={setContact}
             setLocateMe={setLocateMe}
             l={l}
             setL={setL}
@@ -114,6 +116,8 @@ function App() {
             path="/map"
             element={
               <MyMapContainer
+                setContact={setContact}
+                contact={contact}
                 locateMe={locateMe}
                 setLocateMe={setLocateMe}
                 l={l}

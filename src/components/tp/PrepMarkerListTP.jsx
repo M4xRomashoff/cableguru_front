@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import L from 'leaflet';
 
 import mrk_hub_slate from '../icons/hub_slate.png';
@@ -16,7 +16,7 @@ import mrk_service_orange from '../icons/service_orange.png';
 import mrk_service_red from '../icons/service_red.png';
 import mrk_service_green from '../icons/service_green.png';
 
-import { Marker, Popup, Tooltip } from 'react-leaflet';
+import { Marker, Tooltip } from 'react-leaflet';
 import { FeatureGroup } from 'react-leaflet';
 
 function MultipleMarkers({ editMode, deleteMode, dragMode, drawingCable, setPointInfoFCS, markers }) {
@@ -76,9 +76,7 @@ function MultipleMarkers({ editMode, deleteMode, dragMode, drawingCable, setPoin
     });
     return icon;
   }
-  function clickMarker(item) {
-    item.icon = getIcon(item.state);
-  }
+
   return markers.map((item) => {
     const click = !editMode && !deleteMode && !drawingCable && !dragMode ? { click: () => onClickMarker(item) } : {};
     return (

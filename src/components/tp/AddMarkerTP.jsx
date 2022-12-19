@@ -1,7 +1,7 @@
-import React from 'react';
+//import React from 'react';
 import L from 'leaflet';
 
-import mrk_shadow from '../icons/sp_shadow.png';
+
 import mrk_hub_slate from '../icons/hub_slate.png';
 import mrk_hub_orange from '../icons/hub_orange.png';
 import mrk_hub_red from '../icons/hub_red.png';
@@ -14,8 +14,6 @@ import mrk_service_slate from '../icons/service_slate.png';
 import mrk_service_orange from '../icons/service_orange.png';
 import mrk_service_red from '../icons/service_red.png';
 import mrk_service_green from '../icons/service_green.png';
-import { getSessionItem } from '../../helpers/storage';
-import { logAddInfo } from '../../api/logFileApi';
 
 function getIcon(status) {
   let iconUrl_link = mrk_hub_slate;

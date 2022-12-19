@@ -54,7 +54,7 @@ const ModalChangeAccess = ({ onClose, userId }) => {
     });
   }, []);
 
-  useEffect(() => {
+  // useEffect(() => {
     // if (accessOptions !== undefined) {
     //   let filteredNoAccess = [];
     //   noAccessOptions.forEach(element => {
@@ -66,7 +66,7 @@ const ModalChangeAccess = ({ onClose, userId }) => {
     //   });
     //   setNoAccessOptions(filteredNoAccess);
     // }
-  }, [accessOptions]);
+  // }, [accessOptions]);
 
   const handleSubmit = (event) => {
     event.preventDefault();

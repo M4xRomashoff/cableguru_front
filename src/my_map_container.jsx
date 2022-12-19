@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import MyMap from './my_map';
 import MyData from './my_data';
 import { getDataCableRequest, getDataSpRequest, getDataTpRequest, getConnections, getProjectOpitons } from './api/dataBasesApi';
@@ -9,10 +9,11 @@ import SearchModal from './components/Modals/SearchModal';
 import PrintModal from './components/Modals/PrintModal';
 import HistoryModal from './components/Modals/HistoryModal';
 import DocumentsModal from './components/Modals/DocumentsModal';
+import ContactUs from './components/Modals/ContactUs';
 
 let centerDefault = [51.515, -0.09];
 
-function MyMapContainer({ setLocateMe, locateMe, l, documents, setDocuments, lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
+function MyMapContainer({ contact, setContact, setLocateMe, locateMe, l, documents, setDocuments, lb, setLb, setSetting, settings, search, setSearch, print, setPrint, history, setHistory, setTraceIsOpen, setRouteDetailsIsOpen, traceIsOpen, routeDetailsIsOpen }) {
   const [center, setCenter] = useState([]);
   const [readySp, setReadySp] = useState(false);
   const [readyTp, setReadyTp] = useState(false);
@@ -164,6 +165,9 @@ function MyMapContainer({ setLocateMe, locateMe, l, documents, setDocuments, lb,
   const onCloseDocumentsModal = () => {
     setDocuments(false);
   };
+  const onCloseContactUs = () => {
+    setContact(false);
+  };
   return (
     <div>
       {lb && <LossAndBudgetModal l={l} lb={lb} setLb={setLb} onClose={onCloseLossAndBudgetModal} markersTp={markersTP} markersSp={markersSP} />}
@@ -172,6 +176,7 @@ function MyMapContainer({ setLocateMe, locateMe, l, documents, setDocuments, lb,
       {print && <PrintModal l={l} onClose={onClosePrintModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
       {history && <HistoryModal l={l} onClose={onCloseHistoryModal} markersSp={markersSP} markersTp={markersTP} map={map} />}
       {documents && <DocumentsModal l={l} onClose={onCloseDocumentsModal}  />}
+      {contact && <ContactUs  l={l} onClose={onCloseContactUs}/>}
 
       <MyData />
       {readyCab && readyCon && readyTp && readySp && (

@@ -58,10 +58,10 @@ const PrintModal = ({ l, onClose, markersSp, markersTp }) => {
   useEffect(() => {
     let items = [];
     for (let i = 0; i < markersSp.length; i++) {
-      items.push({ label: markersSp[i].name_id, spId: markersSp[i].id, position: markersSp[i].position });
+      items.push({ label: markersSp[i].name_id, spId: markersSp[i].id });
     }
     for (let i = 0; i < markersTp.length; i++) {
-      items.push({ label: markersTp[i].name_id, tpId: markersTp[i].id, position: markersTp[i].position });
+      items.push({ label: markersTp[i].name_id, tpId: markersTp[i].id});
     }
     setItems(items);
   }, []);
@@ -115,9 +115,7 @@ const PrintModal = ({ l, onClose, markersSp, markersTp }) => {
         <BackdropLoading isLoading={isSpLoading || isTpLoading} />
         {stuffToPrint && Boolean(spliceData.header) && (
           <PDFViewer width={850} height={620}>
-            {/*<MyDocument l={l} item={stuffToPrint} spliceData={spliceData} />*/}
             <MyDocument l={l} item={stuffToPrint} spliceData={spliceData} />
-
           </PDFViewer>
         )}
       </Box>

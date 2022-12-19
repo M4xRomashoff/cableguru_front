@@ -1,5 +1,5 @@
 function isFloat(n) {
-  return n != '' && !isNaN(n) && Math.round(n) != n;
+  return n !== '' && !isNaN(n) && Math.round(n) !== n;
 }
 export function getCablePointsFromString(str) {
   const numArr = [];

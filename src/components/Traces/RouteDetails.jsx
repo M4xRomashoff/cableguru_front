@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import '../Home/Home.css';
 import { Box } from '@mui/material';
-import { logAddInfo } from '../../api/logFileApi';
-import useApi from '../../hooks/useApi';
 import ModalWithTitle from '../Modals/ModalWithTitle';
-import CustomInput from '../Inputs';
-import CustomButton from '../Button';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
